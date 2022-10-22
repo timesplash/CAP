@@ -1,0 +1,4 @@
+rootProject.name = 'CAP'
+include 'CAP-api'
+include 'CAP-backend'
+
