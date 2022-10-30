@@ -1,7 +1,7 @@
 package org.dev.backend.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import org.dev.backend.model.Role;
+import org.dev.api.enums.Role;
 import org.dev.backend.model.User;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;

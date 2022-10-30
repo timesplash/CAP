@@ -1,4 +1,4 @@
-package org.dev.backend.model;
+package org.dev.api.enums;
 
 public enum Role {
     ADMIN, PERSONAL, CORPORATE

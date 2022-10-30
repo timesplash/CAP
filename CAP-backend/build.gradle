@@ -12,6 +12,8 @@ repositories {
 }
 
 dependencies {
+    implementation project(":CAP-api")
+
     implementation 'org.springframework.boot:spring-boot-starter-security:2.6.2'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.6.2'
     implementation 'org.postgresql:postgresql:42.3.1'
