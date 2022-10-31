@@ -15,17 +15,17 @@ import java.util.Collection;
 @Getter
 public class User implements UserDetails {
 
-    private final int id;
+    private int id;
 
-    private final String userName;
+    private String userName;
 
-    private final String password;
+    private String password;
 
-    private final String keyQuestion;
+    private String keyQuestion;
 
-    private final String keyAnswer;
+    private String keyAnswer;
 
-    private final Role role;
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

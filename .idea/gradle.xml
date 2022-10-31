@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/CAP-api" />
             <option value="$PROJECT_DIR$/CAP-backend" />
+            <option value="$PROJECT_DIR$/CAP-frontend" />
           </set>
         </option>
       </GradleProjectSettings>

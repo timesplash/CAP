@@ -1,4 +1,5 @@
 rootProject.name = 'CAP'
 include 'CAP-api'
 include 'CAP-backend'
+include 'CAP-frontend'
 
