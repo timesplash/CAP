@@ -1,0 +1,29 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.0'
+    id 'org.openjfx.javafxplugin' version '0.0.12'
+    id 'java'
+    id 'application'
+}
+
+group 'org.dev'
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.2'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
+}
+
+javafx {
+    version = "14"
+    modules = [ 'javafx.controls', 'javafx.fxml']
+}
+
+test {
+    useJUnitPlatform()
+}
