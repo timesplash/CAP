@@ -1,14 +1,15 @@
 package org.dev.frontend.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.dev.api.enums.Role;
 import org.dev.frontend.store.StoreRestUtils;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 
@@ -31,11 +32,14 @@ public class MainController {
     private VBox all;
 
     @FXML
+    private Label errorLbl;
+
+    @FXML
     private void initialize(){
         all.setStyle("-fx-background-color: #515151");
-        if(storeRestUtils.anyUsersPresent()) {
+        //if(storeRestUtils.anyUsersPresent()) {
 
-        }
+        //}
         logInBtn.setDefaultButton(true);
     }
 
@@ -50,7 +54,7 @@ public class MainController {
 
             }
         } catch (AccessDeniedException e) {
-
+            errorLbl.setText("Non matching login & password");
         }
     }
 }

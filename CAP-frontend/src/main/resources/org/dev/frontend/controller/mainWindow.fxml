@@ -14,11 +14,11 @@
 
 <AnchorPane prefHeight="280.0" prefWidth="381.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dev.frontend.controller.MainController">
    <children>
-      <VBox prefHeight="284.0" prefWidth="427.0">
+      <VBox fx:id="all" prefHeight="284.0" prefWidth="427.0">
          <children>
             <HBox alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="57.0" prefWidth="418.0">
                <children>
-                  <Button mnemonicParsing="false" text="Register" />
+                  <Button fx:id="register" mnemonicParsing="false" text="Register" />
                </children>
             </HBox>
             <GridPane prefHeight="99.0" prefWidth="427.0">
@@ -51,7 +51,7 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                      <children>
-                        <TextField>
+                        <TextField fx:id="username">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -60,19 +60,19 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <PasswordField prefHeight="25.0" prefWidth="175.0" />
+                        <PasswordField fx:id="password" prefHeight="25.0" prefWidth="175.0" />
                      </children>
                   </HBox>
                </children>
             </GridPane>
             <HBox alignment="CENTER" prefHeight="74.0" prefWidth="427.0">
                <children>
-                  <Button mnemonicParsing="false" text="Login" />
+                  <Button fx:id="logInBtn" mnemonicParsing="false" onAction="#handleLogInBtnClicked" text="Login" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label text="Label" />
+                  <Label fx:id="errorLbl" text="Label" />
                </children>
             </HBox>
          </children>
