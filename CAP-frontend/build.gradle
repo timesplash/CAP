@@ -6,13 +6,15 @@ plugins {
 }
 
 group 'org.dev'
-version 'unspecified'
+version '0.0.1'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation project(":CAP-api")
+
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.6.2'
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.10'

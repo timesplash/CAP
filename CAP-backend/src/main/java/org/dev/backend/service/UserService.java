@@ -34,8 +34,9 @@ public class UserService {
         return user.orElseThrow(() -> new Exception("No user found with this login!"));
     }
 
-    public List<User> findAll() {
+    public Boolean findAny() {
         log.info("finding all users");
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        return !users.isEmpty();
     }
 }

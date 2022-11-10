@@ -46,11 +46,9 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<Boolean> findAny() {
         log.info("Finding all users");
-        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findAny(), HttpStatus.OK);
     }
-
-
 }
 
