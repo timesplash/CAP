@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.6.0'
+    id 'org.springframework.boot' version '2.6.2'
     id 'org.openjfx.javafxplugin' version '0.0.12'
     id 'java'
     id 'application'
@@ -17,9 +17,13 @@ dependencies {
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.6.2'
-    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
-    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
 }
+
+version = '0.0.1'
+group = 'org.dev.frontend'
+mainClassName = "org.dev.frontend.Main"
 
 javafx {
     version = "14"
