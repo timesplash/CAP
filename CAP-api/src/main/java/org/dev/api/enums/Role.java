@@ -1,5 +1,5 @@
 package org.dev.api.enums;
 
 public enum Role {
-    ADMIN, PERSONAL, CORPORATE
+    ADMIN, CORPORATE, PERSONAL
 }

@@ -65,7 +65,6 @@ public class UserRepositoryImpl extends JdbcDaoSupport implements UserRepository
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
             return User.builder()
-                    .id(rs.getInt(1))
                     .userName(rs.getString(2))
                     .password(rs.getString(3))
                     .role(Role.values()[rs.getInt(4)])

@@ -20,7 +20,7 @@ public class StoreRestUtils {
 
     public static final String GET_USER_BY_LOGIN_REQUEST_URL = "http://localhost:8888/api/users/";
 
-    public static final String SAVE_USER_REQUEST_URL = "http://localhost:8888/api/users/";
+    public static final String SAVE_USER_REQUEST_URL = "http://localhost:8888/api/users/new_user";
 
     public static StoreRestUtils getInstance(){
         return storeRestUtils;

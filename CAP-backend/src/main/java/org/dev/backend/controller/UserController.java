@@ -1,6 +1,7 @@
 package org.dev.backend.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.dev.api.model.UserDTO;
 import org.dev.backend.model.User;
 import org.dev.backend.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PutMapping
-    void saveUser(User user) {
+    @PutMapping("/new_user")
+    void saveUser(@RequestBody User user) {
         log.info("Saving new user...");
         userService.saveUser(user);
     }

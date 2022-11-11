@@ -18,7 +18,7 @@
          <children>
             <HBox alignment="CENTER_RIGHT" maxWidth="-Infinity" prefHeight="57.0" prefWidth="418.0">
                <children>
-                  <Button fx:id="register" mnemonicParsing="false" text="Register" />
+                  <Button fx:id="register" mnemonicParsing="false" onAction="#handleRegisterBtnClicked" text="Register" />
                </children>
             </HBox>
             <GridPane prefHeight="99.0" prefWidth="427.0">

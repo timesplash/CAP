@@ -1,8 +1,6 @@
 package org.dev.backend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import org.dev.api.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,11 +9,11 @@ import java.util.Collection;
 
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Getter
+@Setter
 public class User implements UserDetails {
-
-    private int id;
 
     private String userName;
 
@@ -34,8 +32,9 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return userName;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
