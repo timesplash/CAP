@@ -33,7 +33,7 @@
                <children>
                   <HBox alignment="CENTER_RIGHT">
                      <children>
-                        <Label text="Username: ">
+                        <Label fx:id="usernameLbl" text="Username: ">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -42,7 +42,7 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
                      <children>
-                        <Label text="Password: ">
+                        <Label fx:id="passwordLbl" text="Password: ">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -67,12 +67,12 @@
             </GridPane>
             <HBox alignment="CENTER" prefHeight="74.0" prefWidth="427.0">
                <children>
-                  <Button fx:id="logInBtn" mnemonicParsing="false" onAction="#handleLogInBtnClicked" text="Login" />
+                  <Button fx:id="logInBtn" mnemonicParsing="false" onAction="#handleLogInBtnClicked" text="Login" textFill="#464646" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="errorLbl" text="Label" />
+                  <Label fx:id="errorLbl" />
                </children>
             </HBox>
          </children>

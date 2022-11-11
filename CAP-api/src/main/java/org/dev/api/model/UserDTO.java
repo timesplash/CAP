@@ -1,12 +1,10 @@
 package org.dev.api.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.dev.api.enums.Role;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Getter
 @Setter

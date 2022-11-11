@@ -19,5 +19,6 @@ public class Main extends Application {
         primaryStage.setTitle("Counting and Planning");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setResizable(false);
     }
 }
