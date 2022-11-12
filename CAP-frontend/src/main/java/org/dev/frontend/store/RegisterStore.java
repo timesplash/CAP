@@ -32,7 +32,7 @@ public class RegisterStore {
 
     public void addUser() throws RuntimeException {
         UserDTO userDTO;
-        if (!storeRestUtils.anyUsersPresent()) {
+        if (storeRestUtils.anyUsersPresent()) {
             userDTO = UserDTO.builder()
                     .userName(login.get())
                     .password(password.get())

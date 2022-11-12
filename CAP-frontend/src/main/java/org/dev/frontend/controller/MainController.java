@@ -1,5 +1,6 @@
 package org.dev.frontend.controller;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,8 +22,12 @@ import org.dev.frontend.store.StoreRestUtils;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 
+import static org.dev.frontend.Main.hideMainWindow;
+
 public class MainController {
     private final StoreRestUtils storeRestUtils = StoreRestUtils.getInstance();
+
+
 
     @FXML
     private Button register;
@@ -62,18 +67,19 @@ public class MainController {
         register.styleProperty().bind(Bindings.when(register.hoverProperty())
                 .then(Style.buttonBorderlessStyleHovered)
                 .otherwise(Style.buttonBorderlessStyle));
+        storeRestUtils.login("Empty","12345");
 
-//        if(storeRestUtils.anyUsersPresent()) {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("registerWindow.fxml"));
-//            Parent root = loader.load();
-//            Scene scene = new Scene(root);
-//            Stage primaryStage = new Stage();
-//            primaryStage.setTitle(StringConstants.programName);
-//            primaryStage.setScene(scene);
-//            primaryStage.show();
-//            primaryStage.setResizable(false);
-//            Main.hideMainWindow();
-//        }
+        if(storeRestUtils.anyUsersPresent()) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("registerWindow.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle(StringConstants.programName);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+            primaryStage.setResizable(false);
+            Platform.runLater(() -> {try {Main.hideMainWindow();} catch (Exception ignored) {}});
+        }
         logInBtn.setDefaultButton(true);
     }
 
@@ -84,8 +90,10 @@ public class MainController {
 
             } else if (storeRestUtils.login(username.getText() , password.getText()) == Role.CORPORATE) {
 
-            } else {
+            } else if (storeRestUtils.login(username.getText() , password.getText()) == Role.PERSONAL){
 
+            } else {
+                errorLbl.setText("Non matching login & password");
             }
         } catch (AccessDeniedException e) {
             errorLbl.setText("Non matching login & password");
@@ -102,7 +110,14 @@ public class MainController {
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setResizable(false);
-        primaryStage.setOnCloseRequest(e -> Main.showMainWindow());
-        Main.hideMainWindow();
+        primaryStage.setOnCloseRequest(e -> {
+            Platform.runLater(() -> {try {Main.showMainWindow();} catch (Exception ignored) {}});
+            try {
+                initialize();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        //hideMainWindow();
     }
 }

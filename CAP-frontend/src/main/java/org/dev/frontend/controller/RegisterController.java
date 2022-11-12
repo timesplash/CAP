@@ -11,6 +11,8 @@ import org.dev.frontend.Style;
 import org.dev.frontend.store.RegisterStore;
 import org.dev.frontend.store.StoreRestUtils;
 
+import java.util.Objects;
+
 
 public class RegisterController {
 
@@ -80,15 +82,20 @@ public class RegisterController {
         question.textProperty().bindBidirectional(registerStore.getKeyQuestion());
         answer.textProperty().bindBidirectional(registerStore.getKeyAnswer());
         if (storeRestUtils.anyUsersPresent()) {
-            role.setDisable(false);
-            role.setVisible(true);
-        } else {
             role.setDisable(true);
             role.setVisible(false);
+            roleLbl.setVisible(false);
+        } else {
+            role.setDisable(false);
+            role.setVisible(true);
+            roleLbl.setVisible(true);
         }
         role.setItems(registerStore.getRoles());
         role.getSelectionModel().selectFirst();
         registerStore.bindRolesToEnum(role.getSelectionModel().selectedIndexProperty());
+
+        String css = Objects.requireNonNull(this.getClass().getResource("comboboxStyle.css")).toExternalForm();
+        role.getStylesheets().add(css);
     }
 
     @FXML
@@ -100,5 +107,4 @@ public class RegisterController {
             saveMessage.setText("Something gone south... Try again later.");
         }
     }
-
 }

@@ -38,6 +38,6 @@ public class UserService {
     public Boolean findAny() {
         log.info("finding all users");
         List<User> users = userRepository.findAll();
-        return !users.isEmpty();
+        return users.size() <= 1;
     }
 }
