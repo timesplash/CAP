@@ -1,7 +1,6 @@
 package org.dev.backend.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.dev.api.model.UserDTO;
 import org.dev.backend.model.User;
 import org.dev.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;

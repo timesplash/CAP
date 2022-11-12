@@ -13,7 +13,9 @@ import org.dev.frontend.store.StoreRestUtils;
 
 import java.util.Objects;
 
-
+/**
+ * RegisterController - controller for a registration window
+ */
 public class RegisterController {
 
     private final RegisterStore registerStore = RegisterStore.getStore();
