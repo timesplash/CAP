@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox fx:id="all" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1223.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dev.frontend.CAP.controller.AdminControlController">
+   <children>
+      <VBox fx:id="controlsPanel" alignment="TOP_CENTER" prefHeight="835.0" prefWidth="264.0">
+         <children>
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="263.0" />
+            <HBox alignment="CENTER" prefHeight="41.0" prefWidth="263.0">
+               <children>
+                  <Button fx:id="outdatedUsersBtn" mnemonicParsing="false" onAction="#outdatedUsersBtnClicked" prefHeight="25.0" prefWidth="228.0" text="List of outdated users" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="41.0" prefWidth="263.0">
+               <children>
+                  <Button fx:id="categoriesRequestBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="228.0" text="New categories requests" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="41.0" prefWidth="263.0">
+               <children>
+                  <Button fx:id="infoBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="228.0" text="Information" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox fx:id="dataPanel" fillWidth="false" prefHeight="835.0" prefWidth="962.0" />
+   </children>
+</HBox>

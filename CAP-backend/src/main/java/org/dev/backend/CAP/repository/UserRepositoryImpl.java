@@ -24,7 +24,7 @@ public class UserRepositoryImpl extends JdbcDaoSupport implements UserRepository
             "= (EXCLUDED.login,EXCLUDED.password, EXCLUDED.role, EXCLUDED.question, EXCLUDED.answer)";
 
     //language=SQL
-    public static final String DELETE_USER_REQUEST = "DELETE FROM users WHERE id = ?";
+    public static final String DELETE_USER_REQUEST = "DELETE FROM users WHERE login = ?";
 
     //language=SQL
     public static final String FIND_BY_LOGIN = "SELECT * FROM users WHERE login = ?";
@@ -45,8 +45,8 @@ public class UserRepositoryImpl extends JdbcDaoSupport implements UserRepository
     }
 
     @Override
-    public void delete(int id) {
-        getJdbcTemplate().update(DELETE_USER_REQUEST,id);
+    public void delete(String login) {
+        getJdbcTemplate().update(DELETE_USER_REQUEST, login);
     }
 
     @Override

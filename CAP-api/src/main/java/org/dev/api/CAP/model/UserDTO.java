@@ -9,9 +9,8 @@ import org.dev.api.CAP.enums.Role;
 @Builder
 @Getter
 @Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO {
-
 
     private String userName;
 

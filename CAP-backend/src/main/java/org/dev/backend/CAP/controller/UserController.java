@@ -21,15 +21,14 @@ public class UserController {
 
     @PutMapping("/new_user")
     void saveUser(@RequestBody User user) {
-        log.info("Saving new user...");
         userService.saveUser(user);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") int id) {
+    @DeleteMapping(value = "/{login}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("login") String login) {
         try {
             log.info("Deleting user. Great success!");
-            userService.deleteUser(id);
+            userService.deleteUser(login);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             log.info("Deleting user. WHAT?!?! YOU LIED TO ME! You lied about California!");
@@ -39,13 +38,11 @@ public class UserController {
 
     @GetMapping(value = "/{login}")
     public ResponseEntity<User> findByLogin(@PathVariable("login") String login) throws Exception {
-        log.info("Finding user by login = " + login);
         return new ResponseEntity<>(userService.findByLogin(login), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<Boolean> findAny() {
-        log.info("Finding all users");
         return new ResponseEntity<>(userService.findAny(), HttpStatus.OK);
     }
 }

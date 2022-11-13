@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface UserRepository {
     void save(User user);
 
-void delete(int id);
+    void delete(String login);
 
     Optional<User> findByLogin(String userName);
 

@@ -23,13 +23,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(int id) {
-        log.info("Deleting user...");
-        userRepository.delete(id);
+    public void deleteUser(String login) {
+        userRepository.delete(login);
     }
 
     public User findByLogin(String login) throws Exception {
-        log.info("Finding user...");
+        log.info("Finding user..." + login);
         Optional<User> user = userRepository.findByLogin(login);
         return user.orElseThrow(() -> new Exception("No user found with this login!"));
     }

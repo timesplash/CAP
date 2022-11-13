@@ -2,7 +2,6 @@ package org.dev.frontend.CAP.controller;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -53,7 +52,7 @@ public class MainController {
 
     @FXML
     private void initialize() throws IOException {
-        all.setStyle(Style.backgroundStyle);
+        all.setStyle(Style.backgroundGreyStyle);
         errorLbl.setStyle(Style.labelWhiteStyle);
         usernameLbl.setStyle(Style.labelWhiteStyle);
         passwordLbl.setStyle(Style.labelWhiteStyle);
@@ -68,21 +67,13 @@ public class MainController {
         storeRestUtils.login("Empty","12345");
 
         if(storeRestUtils.anyUsersPresent()) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("registerWindow.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage primaryStage = new Stage();
-            primaryStage.setTitle(StringConstants.programName);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-            primaryStage.setResizable(false);
-            Platform.runLater(() -> {try {Main.hideMainWindow();} catch (Exception ignored) {}});
+            handleRegisterBtnClicked();
         }
         logInBtn.setDefaultButton(true);
     }
 
     @FXML
-    private void handleLogInBtnClicked(ActionEvent event) {
+    private void handleLogInBtnClicked() {
         try {
             if(storeRestUtils.login(username.getText() , password.getText()) == Role.ADMIN){
 
@@ -99,7 +90,7 @@ public class MainController {
     }
 
     @FXML
-    private void handleRegisterBtnClicked(ActionEvent event) throws IOException {
+    private void handleRegisterBtnClicked() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("registerWindow.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
@@ -116,6 +107,6 @@ public class MainController {
                 throw new RuntimeException(ex);
             }
         });
-        //hideMainWindow();
+        Platform.runLater(() -> {try {Main.hideMainWindow();} catch (Exception ignored) {}});
     }
 }
