@@ -8,6 +8,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.dev.frontend.CAP.Style;
+import org.dev.frontend.CAP.store.AdminControlStore;
 
 public class AdminControlController {
 
@@ -18,6 +19,8 @@ public class AdminControlController {
     private final Double buttonXSize = 228.0;
 
     private final Double buttonYSize = 25.0;
+
+    private final AdminControlStore adminControlStore = AdminControlStore.getStore();
 
     @FXML
     private HBox all;
@@ -38,10 +41,14 @@ public class AdminControlController {
     private Button infoBtn;
 
     @FXML
+    public ListView<String> listOfUsers;
+
+    @FXML
     private void initialize() {
         all.setStyle(Style.backgroundGreyStyle);
         controlsPanel.setStyle(Style.backgroundGreyStyle);
         dataPanel.setStyle(Style.backgroundBlackStyle);
+        dataPanel.getChildren().clear();
 
         outdatedUsersBtn.styleProperty().bind(Bindings.when(outdatedUsersBtn.hoverProperty())
                 .then(Style.buttonStyleHovered)
@@ -52,58 +59,80 @@ public class AdminControlController {
         infoBtn.styleProperty().bind(Bindings.when(infoBtn.hoverProperty())
                 .then(Style.buttonStyleHovered)
                 .otherwise(Style.buttonStyle));
+
+        adminControlStore.refreshStore();
+        adminControlStore.populateEntries();
+
+        listOfUsers.setItems(adminControlStore.getAllEntries());
+
     }
 
     @FXML
     private void outdatedUsersBtnClicked() {
-        double xSize = dataPanel.getLayoutX();
-        double ySize = dataPanel.getLayoutY();
+        dataPanel.getChildren().clear();
+        double xSize = dataPanel.getWidth();
+        double ySize = dataPanel.getHeight();
         HBox emptyHBox = new HBox();
-        emptyHBox.setLayoutX(xSize);
-        emptyHBox.setLayoutY(25);
         dataPanel.getChildren().add(emptyHBox);
+        emptyHBox.setPrefWidth(xSize);
+        emptyHBox.setPrefHeight(25);
+        emptyHBox.setMinWidth(xSize);
+        emptyHBox.setMinHeight(25);
 
         HBox boxWithListOfUsers = new HBox();
-        boxWithListOfUsers.setLayoutY(ySize - 25);
-        boxWithListOfUsers.setLayoutX(xSize);
+        boxWithListOfUsers.setPrefHeight(ySize - 25);
+        boxWithListOfUsers.setMinHeight(ySize - 25);
+        boxWithListOfUsers.setPrefWidth(xSize);
         boxWithListOfUsers.setAlignment(Pos.CENTER);
-        dataPanel.getChildren().add(boxWithListOfUsers);
 
-        ListView listOfUsers = new ListView();
-        listOfUsers.setLayoutY(boxWithListOfUsers.getLayoutY());
-        listOfUsers.setLayoutX(boxWithListOfUsers.getLayoutX() - buttonBoxXSize);
-        populatingListOfUsers(listOfUsers);
+
+        listOfUsers.setPrefHeight(boxWithListOfUsers.getPrefHeight());
+        listOfUsers.setPrefWidth(boxWithListOfUsers.getPrefWidth() - buttonBoxXSize);
+        listOfUsers.setVisible(true);
+        listOfUsers.setMinWidth(boxWithListOfUsers.getPrefWidth() - buttonBoxXSize);
+        listOfUsers.setMinHeight(boxWithListOfUsers.getPrefHeight());
 
         VBox buttonsBox = new VBox();
-        buttonsBox.setLayoutX(buttonBoxXSize);
-        buttonsBox.setLayoutY(boxWithListOfUsers.getLayoutY());
-        buttonsBox.setAlignment(Pos.CENTER);
+        buttonsBox.setPrefWidth(buttonBoxXSize);
+        buttonsBox.setPrefHeight(boxWithListOfUsers.getHeight());
+        buttonsBox.setAlignment(Pos.TOP_CENTER);
 
         HBox deleteBtnBox = new HBox();
-        deleteBtnBox.setLayoutY(buttonBoxYSize);
-        deleteBtnBox.setLayoutX(buttonBoxXSize);
+        deleteBtnBox.setPrefHeight(buttonBoxYSize);
+        deleteBtnBox.setMinHeight(buttonBoxYSize);
+        deleteBtnBox.setPrefWidth(buttonBoxXSize);
         deleteBtnBox.setAlignment(Pos.CENTER);
 
         Button deleteBtn = new Button();
-        deleteBtn.setLayoutX(buttonXSize);
-        deleteBtn.setLayoutY(buttonYSize);
+        deleteBtn.setPrefWidth(buttonXSize);
+        deleteBtn.setPrefHeight(buttonYSize);
+        deleteBtn.setText("Delete user");
         deleteBtn.styleProperty().bind(Bindings.when(deleteBtn.hoverProperty())
                 .then(Style.buttonStyleHovered)
                 .otherwise(Style.buttonStyle));
+        deleteBtn.setOnAction(e -> {
+            deleteBtnAction();
+        });
 
         deleteBtnBox.getChildren().add(deleteBtn);
         buttonsBox.getChildren().add(deleteBtnBox);
         boxWithListOfUsers.getChildren().add(listOfUsers);
+        boxWithListOfUsers.getChildren().add(buttonsBox);
+        dataPanel.getChildren().add(boxWithListOfUsers);
 
+        adminControlStore.refreshStore();
+        adminControlStore.populateEntries();
 
-    }
-
-    private void populatingListOfUsers (ListView listView) {
-        listView.getItems().clear();
-
+        listOfUsers.setItems(adminControlStore.getAllEntries());
     }
 
     private void deleteBtnAction() {
+        String selectedUser = listOfUsers.getSelectionModel().getSelectedItem();
+        String[] login = selectedUser.split("; ");
+        adminControlStore.deleteInactiveUser(login[0]);
+        adminControlStore.refreshStore();
+        adminControlStore.populateEntries();
 
+        listOfUsers.setItems(adminControlStore.getAllEntries());
     }
 }

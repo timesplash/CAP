@@ -18,7 +18,7 @@ public class LogInDatesRepositoryImpl extends JdbcDaoSupport implements LogInDat
 
     //language=SQL
     public static final String SAVE_NEW_ENTRY = "INSERT INTO log_in_date (user_id, date) VALUES (?,?)" +
-            " ON CONFLICT (id) DO UPDATE SET date = EXCLUDED.date";
+            " ON CONFLICT (user_id) DO UPDATE SET date = EXCLUDED.date";
 
     //language=SQL
     public static final String FIND_ALL = "SELECT * FROM log_in_date";

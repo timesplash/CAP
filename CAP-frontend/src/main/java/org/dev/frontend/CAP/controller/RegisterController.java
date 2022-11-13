@@ -63,6 +63,10 @@ public class RegisterController {
 
     @FXML
     private void initialize() {
+        username.setText("");
+        password.setText("");
+        question.setText("");
+        answer.setText("");
         all.setStyle(Style.backgroundGreyStyle);
         createNewUser.styleProperty().bind(Bindings.when(createNewUser.hoverProperty())
                 .then(Style.buttonStyleHovered)

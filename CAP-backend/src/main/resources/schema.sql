@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS log_in_date
 (
     id          SERIAL PRIMARY KEY,
-    user_id     TEXT REFERENCES users (login) ON DELETE CASCADE NOT NULL,
+    user_id     TEXT UNIQUE REFERENCES users (login) ON DELETE CASCADE NOT NULL,
     date        TIMESTAMP NOT NULL
 );
 

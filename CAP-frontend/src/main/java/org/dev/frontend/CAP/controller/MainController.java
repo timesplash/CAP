@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dev.api.CAP.enums.Role;
+import org.dev.api.CAP.model.LogInDateDTO;
 import org.dev.frontend.CAP.Style;
 import org.dev.frontend.CAP.Main;
 import org.dev.frontend.CAP.StringConstants;
@@ -20,6 +21,7 @@ import org.dev.frontend.CAP.store.StoreRestUtils;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.time.LocalDateTime;
 
 public class MainController {
     private final StoreRestUtils storeRestUtils = StoreRestUtils.getInstance();
@@ -52,6 +54,8 @@ public class MainController {
 
     @FXML
     private void initialize() throws IOException {
+        username.setText("");
+        password.setText("");
         all.setStyle(Style.backgroundGreyStyle);
         errorLbl.setStyle(Style.labelWhiteStyle);
         usernameLbl.setStyle(Style.labelWhiteStyle);
@@ -76,16 +80,35 @@ public class MainController {
     private void handleLogInBtnClicked() {
         try {
             if(storeRestUtils.login(username.getText() , password.getText()) == Role.ADMIN){
-
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("adminControlWindow.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                Stage primaryStage = new Stage();
+                primaryStage.setTitle(StringConstants.programName);
+                primaryStage.setScene(scene);
+                primaryStage.show();
+                primaryStage.setResizable(true);
             } else if (storeRestUtils.login(username.getText() , password.getText()) == Role.CORPORATE) {
+                LogInDateDTO logInDateDTO = new LogInDateDTO();
+                logInDateDTO.setLogin(username.getText());
+                LocalDateTime time = LocalDateTime.now();
+                logInDateDTO.setDate(time);
+                storeRestUtils.saveNewEntryDate(logInDateDTO);
 
             } else if (storeRestUtils.login(username.getText() , password.getText()) == Role.PERSONAL){
+                LogInDateDTO logInDateDTO = new LogInDateDTO();
+                logInDateDTO.setLogin(username.getText());
+                LocalDateTime time = LocalDateTime.now();
+                logInDateDTO.setDate(time);
+                storeRestUtils.saveNewEntryDate(logInDateDTO);
 
             } else {
                 errorLbl.setText("Non matching login & password");
             }
         } catch (AccessDeniedException e) {
             errorLbl.setText("Non matching login & password");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

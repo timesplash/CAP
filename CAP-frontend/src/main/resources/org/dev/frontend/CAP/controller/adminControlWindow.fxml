@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -26,6 +27,9 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="dataPanel" fillWidth="false" prefHeight="835.0" prefWidth="962.0" />
+      <VBox fx:id="dataPanel" fillWidth="false" prefHeight="835.0" prefWidth="962.0">
+         <children>
+            <ListView fx:id="listOfUsers" prefHeight="0.0" prefWidth="200.0" visible="false" />
+         </children></VBox>
    </children>
 </HBox>
