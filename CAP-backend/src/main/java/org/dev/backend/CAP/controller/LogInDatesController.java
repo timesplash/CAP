@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @CrossOrigin
-@RequestMapping("api/login_dates")
+@RequestMapping("/api/login_dates")
 public class LogInDatesController {
     private final LogInService logInService;
 
