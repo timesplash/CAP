@@ -26,8 +26,6 @@ import java.time.LocalDateTime;
 public class MainController {
     private final StoreRestUtils storeRestUtils = StoreRestUtils.getInstance();
 
-
-
     @FXML
     private Button register;
 
@@ -88,12 +86,14 @@ public class MainController {
                 primaryStage.setScene(scene);
                 primaryStage.show();
                 primaryStage.setResizable(true);
+                errorLbl.setText("");
             } else if (storeRestUtils.login(username.getText() , password.getText()) == Role.CORPORATE) {
                 LogInDateDTO logInDateDTO = new LogInDateDTO();
                 logInDateDTO.setLogin(username.getText());
                 LocalDateTime time = LocalDateTime.now();
                 logInDateDTO.setDate(time);
                 storeRestUtils.saveNewEntryDate(logInDateDTO);
+                errorLbl.setText("");
 
             } else if (storeRestUtils.login(username.getText() , password.getText()) == Role.PERSONAL){
                 LogInDateDTO logInDateDTO = new LogInDateDTO();
@@ -101,6 +101,7 @@ public class MainController {
                 LocalDateTime time = LocalDateTime.now();
                 logInDateDTO.setDate(time);
                 storeRestUtils.saveNewEntryDate(logInDateDTO);
+                errorLbl.setText("");
 
             } else {
                 errorLbl.setText("Non matching login & password");

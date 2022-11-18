@@ -32,6 +32,9 @@ public class UserRepositoryImpl extends JdbcDaoSupport implements UserRepository
     //language=SQL
     public static final String FIND_ALL = "SELECT * FROM users";
 
+    //language=SQL
+    public static final String FIND_NAME_BY_ID = "SELECT login FROM users WHERE id = ?";
+
     UserRepositoryImpl(DataSource dataSource){setDataSource(dataSource);}
 
     @Override
@@ -58,6 +61,11 @@ public class UserRepositoryImpl extends JdbcDaoSupport implements UserRepository
     @Override
     public List<User> findAll() {
         return getJdbcTemplate().query(FIND_ALL, new UserMapper());
+    }
+
+    @Override
+    public String findNameById(int id) {
+        return getJdbcTemplate().query(FIND_NAME_BY_ID, (rs, rn) -> rs.getString(2)).toString();
     }
 
     private static class UserMapper implements RowMapper<User> {

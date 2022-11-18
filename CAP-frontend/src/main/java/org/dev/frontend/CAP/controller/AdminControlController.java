@@ -10,6 +10,8 @@ import javafx.scene.layout.VBox;
 import org.dev.frontend.CAP.Style;
 import org.dev.frontend.CAP.store.AdminControlStore;
 
+import java.util.Objects;
+
 public class AdminControlController {
 
     private final Double buttonBoxYSize = 41.0;
@@ -19,6 +21,13 @@ public class AdminControlController {
     private final Double buttonXSize = 228.0;
 
     private final Double buttonYSize = 25.0;
+
+    private Double xSize;
+    private Double ySize;
+
+    private Double widthOfWindow;
+
+    private Double heightOfWindow;
 
     private final AdminControlStore adminControlStore = AdminControlStore.getStore();
 
@@ -64,61 +73,97 @@ public class AdminControlController {
         adminControlStore.populateEntries();
 
         listOfUsers.setItems(adminControlStore.getAllEntries());
-
+        all.widthProperty().addListener(e -> {
+            widthOfWindow = all.getWidth();
+            dataPanel.setMinWidth(widthOfWindow - buttonBoxXSize);
+            dataPanel.setPrefWidth(widthOfWindow - buttonBoxXSize);
+            dataPanel.setMaxWidth(widthOfWindow - buttonBoxXSize);
+        });
+        all.heightProperty().addListener(e -> {
+            heightOfWindow = all.getHeight();
+            dataPanel.setMinHeight(heightOfWindow);
+            dataPanel.setPrefHeight(heightOfWindow);
+            dataPanel.setMaxHeight(heightOfWindow);
+        });
     }
 
     @FXML
     private void outdatedUsersBtnClicked() {
         dataPanel.getChildren().clear();
-        double xSize = dataPanel.getWidth();
-        double ySize = dataPanel.getHeight();
+        dataPanel.setFillWidth(true);
+        xSize = dataPanel.getWidth();
+        ySize = dataPanel.getHeight();
+
         HBox emptyHBox = new HBox();
-        dataPanel.getChildren().add(emptyHBox);
-        emptyHBox.setPrefWidth(xSize);
         emptyHBox.setPrefHeight(25);
-        emptyHBox.setMinWidth(xSize);
         emptyHBox.setMinHeight(25);
 
         HBox boxWithListOfUsers = new HBox();
-        boxWithListOfUsers.setPrefHeight(ySize - 25);
-        boxWithListOfUsers.setMinHeight(ySize - 25);
-        boxWithListOfUsers.setPrefWidth(xSize);
         boxWithListOfUsers.setAlignment(Pos.CENTER);
 
-
-        listOfUsers.setPrefHeight(boxWithListOfUsers.getPrefHeight());
-        listOfUsers.setPrefWidth(boxWithListOfUsers.getPrefWidth() - buttonBoxXSize);
         listOfUsers.setVisible(true);
-        listOfUsers.setMinWidth(boxWithListOfUsers.getPrefWidth() - buttonBoxXSize);
-        listOfUsers.setMinHeight(boxWithListOfUsers.getPrefHeight());
+        listOfUsers.setStyle(Style.textFieldStyle);
+        String css = Objects.requireNonNull(this.getClass().getResource("listViewStyle.css")).toExternalForm();
+        listOfUsers.getStylesheets().add(css);
 
         VBox buttonsBox = new VBox();
-        buttonsBox.setPrefWidth(buttonBoxXSize);
-        buttonsBox.setPrefHeight(boxWithListOfUsers.getHeight());
         buttonsBox.setAlignment(Pos.TOP_CENTER);
 
         HBox deleteBtnBox = new HBox();
-        deleteBtnBox.setPrefHeight(buttonBoxYSize);
-        deleteBtnBox.setMinHeight(buttonBoxYSize);
-        deleteBtnBox.setPrefWidth(buttonBoxXSize);
         deleteBtnBox.setAlignment(Pos.CENTER);
 
         Button deleteBtn = new Button();
-        deleteBtn.setPrefWidth(buttonXSize);
-        deleteBtn.setPrefHeight(buttonYSize);
         deleteBtn.setText("Delete user");
         deleteBtn.styleProperty().bind(Bindings.when(deleteBtn.hoverProperty())
                 .then(Style.buttonStyleHovered)
                 .otherwise(Style.buttonStyle));
-        deleteBtn.setOnAction(e -> {
-            deleteBtnAction();
+        deleteBtn.setOnAction(e -> deleteBtnAction());
+
+
+        dataPanel.heightProperty().addListener(e -> {
+            ySize = dataPanel.getHeight();
+            boxWithListOfUsers.setPrefHeight(ySize - 50);
+            boxWithListOfUsers.setMinHeight(ySize - 50);
+            boxWithListOfUsers.setMaxHeight(ySize - 50);
+        });
+
+        boxWithListOfUsers.setPrefHeight(785.0);
+        boxWithListOfUsers.setMinHeight(785.0);
+        boxWithListOfUsers.setMaxHeight(785.0);
+
+        dataPanel.widthProperty().addListener(e -> {
+            xSize = dataPanel.getHeight();
+            emptyHBox.setPrefWidth(xSize);
+            emptyHBox.setMinWidth(xSize);
+            boxWithListOfUsers.setPrefWidth(xSize);
         });
 
         deleteBtnBox.getChildren().add(deleteBtn);
         buttonsBox.getChildren().add(deleteBtnBox);
         boxWithListOfUsers.getChildren().add(listOfUsers);
         boxWithListOfUsers.getChildren().add(buttonsBox);
+        dataPanel.getChildren().add(emptyHBox);
         dataPanel.getChildren().add(boxWithListOfUsers);
+
+        boxWithListOfUsers.widthProperty().addListener(e -> {
+            listOfUsers.setPrefWidth(boxWithListOfUsers.getWidth() - buttonBoxXSize);
+            listOfUsers.setMinWidth(boxWithListOfUsers.getWidth() - buttonBoxXSize);
+            buttonsBox.setPrefWidth(buttonBoxXSize);
+            deleteBtnBox.setPrefWidth(buttonBoxXSize);
+            deleteBtn.setPrefWidth(buttonXSize);
+        });
+        boxWithListOfUsers.heightProperty().addListener(e -> {
+            listOfUsers.setPrefHeight(boxWithListOfUsers.getHeight());
+            listOfUsers.setMinHeight(boxWithListOfUsers.getHeight());
+            buttonsBox.setPrefHeight(boxWithListOfUsers.getHeight());
+            deleteBtnBox.setPrefHeight(buttonBoxYSize);
+            deleteBtnBox.setMinHeight(buttonBoxYSize);
+            deleteBtn.setPrefHeight(buttonYSize);
+        });
+
+
+
+
 
         adminControlStore.refreshStore();
         adminControlStore.populateEntries();

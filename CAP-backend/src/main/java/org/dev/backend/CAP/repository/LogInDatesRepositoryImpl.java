@@ -28,8 +28,11 @@ public class LogInDatesRepositoryImpl extends JdbcDaoSupport implements LogInDat
 
     private final UserRepository userRepository;
 
-    LogInDatesRepositoryImpl(DataSource dataSource, UserRepository userRepository) {
+    private final CategoriesRepository categoriesRepository;
+
+    LogInDatesRepositoryImpl(DataSource dataSource, UserRepository userRepository, CategoriesRepository categoriesRepository) {
         this.userRepository = userRepository;
+        this.categoriesRepository = categoriesRepository;
         setDataSource(dataSource);
     }
 
@@ -47,6 +50,7 @@ public class LogInDatesRepositoryImpl extends JdbcDaoSupport implements LogInDat
     @Override
     public void delete(String login) {
         getJdbcTemplate().update(DELETE_BY_ID, login);
+        categoriesRepository.delete(login);
         userRepository.delete(login);
     }
 
