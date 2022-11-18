@@ -138,6 +138,25 @@ public class AdminControlController {
             boxWithListOfUsers.setPrefWidth(xSize);
         });
 
+
+        dataPanel.heightProperty().addListener(e -> {
+            ySize = dataPanel.getHeight();
+            boxWithListOfUsers.setPrefHeight(ySize - 50);
+            boxWithListOfUsers.setMinHeight(ySize - 50);
+            boxWithListOfUsers.setMaxHeight(ySize - 50);
+        });
+
+        boxWithListOfUsers.setPrefHeight(785.0);
+        boxWithListOfUsers.setMinHeight(785.0);
+        boxWithListOfUsers.setMaxHeight(785.0);
+
+        dataPanel.widthProperty().addListener(e -> {
+            xSize = dataPanel.getHeight();
+            emptyHBox.setPrefWidth(xSize);
+            emptyHBox.setMinWidth(xSize);
+            boxWithListOfUsers.setPrefWidth(xSize);
+        });
+
         deleteBtnBox.getChildren().add(deleteBtn);
         buttonsBox.getChildren().add(deleteBtnBox);
         boxWithListOfUsers.getChildren().add(listOfUsers);
