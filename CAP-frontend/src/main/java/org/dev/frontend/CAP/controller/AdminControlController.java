@@ -1,5 +1,6 @@
 package org.dev.frontend.CAP.controller;
 
+
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -101,6 +102,9 @@ public class AdminControlController {
         HBox boxWithListOfUsers = new HBox();
         boxWithListOfUsers.setAlignment(Pos.CENTER);
 
+        listHeight(boxWithListOfUsers,ySize);
+        listWidth(emptyHBox,boxWithListOfUsers,xSize);
+
         listOfUsers.setVisible(true);
         listOfUsers.setStyle(Style.textFieldStyle);
         String css = Objects.requireNonNull(this.getClass().getResource("listViewStyle.css")).toExternalForm();
@@ -122,39 +126,14 @@ public class AdminControlController {
 
         dataPanel.heightProperty().addListener(e -> {
             ySize = dataPanel.getHeight();
-            boxWithListOfUsers.setPrefHeight(ySize - 50);
-            boxWithListOfUsers.setMinHeight(ySize - 50);
-            boxWithListOfUsers.setMaxHeight(ySize - 50);
+            listHeight(boxWithListOfUsers,ySize);
         });
 
-        boxWithListOfUsers.setPrefHeight(785.0);
-        boxWithListOfUsers.setMinHeight(785.0);
-        boxWithListOfUsers.setMaxHeight(785.0);
+
 
         dataPanel.widthProperty().addListener(e -> {
             xSize = dataPanel.getHeight();
-            emptyHBox.setPrefWidth(xSize);
-            emptyHBox.setMinWidth(xSize);
-            boxWithListOfUsers.setPrefWidth(xSize);
-        });
-
-
-        dataPanel.heightProperty().addListener(e -> {
-            ySize = dataPanel.getHeight();
-            boxWithListOfUsers.setPrefHeight(ySize - 50);
-            boxWithListOfUsers.setMinHeight(ySize - 50);
-            boxWithListOfUsers.setMaxHeight(ySize - 50);
-        });
-
-        boxWithListOfUsers.setPrefHeight(785.0);
-        boxWithListOfUsers.setMinHeight(785.0);
-        boxWithListOfUsers.setMaxHeight(785.0);
-
-        dataPanel.widthProperty().addListener(e -> {
-            xSize = dataPanel.getHeight();
-            emptyHBox.setPrefWidth(xSize);
-            emptyHBox.setMinWidth(xSize);
-            boxWithListOfUsers.setPrefWidth(xSize);
+            listWidth(emptyHBox,boxWithListOfUsers,xSize);
         });
 
         deleteBtnBox.getChildren().add(deleteBtn);
@@ -188,6 +167,18 @@ public class AdminControlController {
         adminControlStore.populateEntries();
 
         listOfUsers.setItems(adminControlStore.getAllEntries());
+    }
+
+    private void listHeight(HBox hBox,double val){
+        hBox.setPrefHeight(val - 50);
+        hBox.setMinHeight(val - 50);
+        hBox.setMaxHeight(val - 50);
+    }
+
+    private void listWidth(HBox hBox1, HBox hBox2, double val){
+        hBox1.setPrefWidth(val);
+        hBox1.setMinWidth(val);
+        hBox2.setPrefWidth(val);
     }
 
     private void deleteBtnAction() {

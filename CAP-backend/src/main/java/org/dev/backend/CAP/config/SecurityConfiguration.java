@@ -20,15 +20,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final BasicAuthService userDetailsService;
 
+    private final String[] permittedConnections = {"/api/users", "/api/users/new_user", };
+
     public SecurityConfiguration(BasicAuthService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
+
+    //Look throw anyRequest() and change to something
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf().disable()
-                .authorizeRequests().anyRequest().authenticated()
+                .authorizeRequests()
+                .antMatchers(permittedConnections).permitAll()
+                .anyRequest().authenticated()
                 .and().cors()
                 .and().httpBasic()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

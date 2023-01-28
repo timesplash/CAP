@@ -36,6 +36,6 @@ public class UserService {
     public Boolean findAny() {
         log.info("finding all users");
         List<User> users = userRepository.findAll();
-        return users.size() <= 1;
+        return users.size() < 1;
     }
 }

@@ -24,7 +24,3 @@ CREATE TABLE IF NOT EXISTS categories
     user_id     INT UNIQUE REFERENCES users (id) ON DELETE CASCADE NOT NULL
 );
 
-INSERT INTO users (login, role, password,question,answer)
-VALUES ('Empty', 3,
-        '$2a$10$RnvJ13zcdIzxzgqrz0nB8.m8zuY9h8VhaEkRiqc478ws79oq9vGQG',
-        0,0);

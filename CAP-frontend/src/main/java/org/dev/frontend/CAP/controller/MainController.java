@@ -66,7 +66,6 @@ public class MainController {
         register.styleProperty().bind(Bindings.when(register.hoverProperty())
                 .then(Style.buttonBorderlessStyleHovered)
                 .otherwise(Style.buttonBorderlessStyle));
-        storeRestUtils.login("Empty","12345");
 
         if(storeRestUtils.anyUsersPresent()) {
             handleRegisterBtnClicked();
