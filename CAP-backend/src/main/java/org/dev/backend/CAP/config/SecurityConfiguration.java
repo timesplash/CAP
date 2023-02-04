@@ -20,14 +20,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final BasicAuthService userDetailsService;
 
-    private final String[] permittedConnections = {"/api/users", "/api/users/new_user", };
+    private final String[] permittedConnections = {"/api/users", "/api/users/new_user"};
 
     public SecurityConfiguration(BasicAuthService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
-
-    //Look throw anyRequest() and change to something
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
