@@ -23,7 +23,7 @@ public class CategoriesRepositoryImpl extends JdbcDaoSupport implements Categori
     //language=SQL
     private static final String GET_ALL_CATEGORIES = "SELECT * FROM categories";
 
-    //Кажется хуйню какую то написал...
+    //Кажется хуйню какую то написал... upd: А может и не хуйню...
     //language=SQL
     private static final String DELETE_CATEGORIES_OF_USER = "DELETE FROM categories USING users " +
             "AS us JOIN categories c on us.id = c.user_id WHERE us.login = ?";

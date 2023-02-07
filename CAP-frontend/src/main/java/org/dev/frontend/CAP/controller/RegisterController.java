@@ -7,10 +7,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import org.dev.api.CAP.model.LogInDateDTO;
 import org.dev.frontend.CAP.Style;
 import org.dev.frontend.CAP.store.RegisterStore;
 import org.dev.frontend.CAP.store.StoreRestUtils;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -109,6 +111,11 @@ public class RegisterController {
         try {
             registerStore.addUser();
             saveMessage.setText("Great Success! You can log in now.");
+            LogInDateDTO logInDateDTO = new LogInDateDTO();
+            logInDateDTO.setLogin(username.getText());
+            LocalDateTime time = LocalDateTime.now();
+            logInDateDTO.setDate(time);
+            storeRestUtils.saveNewEntryDate(logInDateDTO);
         } catch (RuntimeException e) {
             saveMessage.setText("Something gone south... Try again later.");
         }

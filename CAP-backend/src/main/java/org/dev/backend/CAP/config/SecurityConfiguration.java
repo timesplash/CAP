@@ -20,7 +20,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final BasicAuthService userDetailsService;
 
-    private final String[] permittedConnections = {"/api/users", "/api/users/new_user"};
+    private final String[] permittedConnections = {"/api/users", "/api/users/new_user","/api/login_dates"};
 
     public SecurityConfiguration(BasicAuthService userDetailsService) {
         this.userDetailsService = userDetailsService;
