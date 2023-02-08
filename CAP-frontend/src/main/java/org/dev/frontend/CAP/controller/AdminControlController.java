@@ -56,6 +56,7 @@ public class AdminControlController {
     @FXML
     private void initialize() {
         all.setStyle(Style.backgroundGreyStyle);
+
         controlsPanel.setStyle(Style.backgroundGreyStyle);
         dataPanel.setStyle(Style.backgroundBlackStyle);
         dataPanel.getChildren().clear();
@@ -129,7 +130,10 @@ public class AdminControlController {
             listHeight(boxWithListOfUsers,ySize);
         });
 
-
+        HBox emptyBox = new HBox();
+        emptyBox.setMinWidth((buttonBoxXSize - buttonXSize) / 2.0);
+        emptyBox.setMaxWidth((buttonBoxXSize - buttonXSize) / 2.0);
+        emptyBox.setPrefWidth((buttonBoxXSize - buttonXSize) / 2.0);
 
         dataPanel.widthProperty().addListener(e -> {
             xSize = dataPanel.getHeight();
@@ -138,6 +142,7 @@ public class AdminControlController {
 
         deleteBtnBox.getChildren().add(deleteBtn);
         buttonsBox.getChildren().add(deleteBtnBox);
+        boxWithListOfUsers.getChildren().add(emptyBox);
         boxWithListOfUsers.getChildren().add(listOfUsers);
         boxWithListOfUsers.getChildren().add(buttonsBox);
         dataPanel.getChildren().add(emptyHBox);
@@ -158,10 +163,6 @@ public class AdminControlController {
             deleteBtnBox.setMinHeight(buttonBoxYSize);
             deleteBtn.setPrefHeight(buttonYSize);
         });
-
-
-
-
 
         adminControlStore.refreshStore();
         adminControlStore.populateEntries();

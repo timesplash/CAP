@@ -2,6 +2,7 @@ package org.dev.frontend.CAP.controller;
 
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -12,13 +13,15 @@ import org.dev.frontend.CAP.Style;
 import org.dev.frontend.CAP.store.RegisterStore;
 import org.dev.frontend.CAP.store.StoreRestUtils;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * RegisterController - controller for a registration window
  */
-public class RegisterController {
+public class RegisterController implements Initializable {
 
     private final RegisterStore registerStore = RegisterStore.getStore();
 
@@ -63,12 +66,9 @@ public class RegisterController {
     @FXML
     private ComboBox<String> role;
 
-    @FXML
-    private void initialize() {
-        username.setText("");
-        password.setText("");
-        question.setText("");
-        answer.setText("");
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        reset();
         all.setStyle(Style.backgroundGreyStyle);
         createNewUser.styleProperty().bind(Bindings.when(createNewUser.hoverProperty())
                 .then(Style.buttonStyleHovered)
@@ -109,15 +109,27 @@ public class RegisterController {
     @FXML
     private void createBtnAction() {
         try {
-            registerStore.addUser();
+            if (!storeRestUtils.anyUsersPresent()) {
+                LogInDateDTO logInDateDTO = new LogInDateDTO();
+                logInDateDTO.setLogin(username.getText());
+                LocalDateTime time = LocalDateTime.now();
+                logInDateDTO.setDate(time);
+                registerStore.addUser();
+                storeRestUtils.saveNewEntryDate(logInDateDTO);
+            } else {
+                registerStore.addUser();
+            }
             saveMessage.setText("Great Success! You can log in now.");
-            LogInDateDTO logInDateDTO = new LogInDateDTO();
-            logInDateDTO.setLogin(username.getText());
-            LocalDateTime time = LocalDateTime.now();
-            logInDateDTO.setDate(time);
-            storeRestUtils.saveNewEntryDate(logInDateDTO);
+            reset();
         } catch (RuntimeException e) {
             saveMessage.setText("Something gone south... Try again later.");
         }
+    }
+
+    private void reset() {
+        username.setText("");
+        password.setText("");
+        question.setText("");
+        answer.setText("");
     }
 }

@@ -1,9 +1,15 @@
 package org.dev.frontend.CAP.controller;
 
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.dev.api.CAP.model.DataDTO;
 import org.dev.frontend.CAP.Style;
 
 import java.net.URL;
@@ -21,6 +27,10 @@ public class UsersControlController implements Initializable {
     private Double xSize;
 
     private Double ySize;
+
+    private Double widthOfWindow;
+
+    private Double heightOfWindow;
 
     @FXML
     private HBox all;
@@ -54,10 +64,73 @@ public class UsersControlController implements Initializable {
             setVboxHeight(boxWithContent,ySize);
         });
 
+        HBox emptyHBoxForStyleOfButtons = new HBox();
+        emptyHBoxForStyleOfButtons.setMinHeight(buttonYSize);
+        emptyHBoxForStyleOfButtons.setPrefHeight(buttonYSize);
+        emptyHBoxForStyleOfButtons.setMaxHeight(buttonYSize);
+
         HBox buttonBoxGainsAndLoses = new HBox();
         setButtonBoxSize(buttonBoxGainsAndLoses);
+        buttonBoxGainsAndLoses.setAlignment(Pos.CENTER);
 
+        Button gainsAndLosesBtn = new Button();
+        gainsAndLosesBtn.setText("Gains and spending");
+        setButtonSize(gainsAndLosesBtn);
+        buttonBoxGainsAndLoses.getChildren().add(gainsAndLosesBtn);
+        setButtonStyle(gainsAndLosesBtn);
+        gainsAndLosesBtn.setOnAction(e -> gainsAndLosesBtnAcn(boxWithContent));
 
+        HBox buttonBoxCreditCalculator = new HBox();
+        setButtonBoxSize(buttonBoxCreditCalculator);
+        buttonBoxCreditCalculator.setAlignment(Pos.CENTER);
+
+        Button creditCalculatorBtn = new Button();
+        creditCalculatorBtn.setText("Credit calculator");
+        setButtonSize(creditCalculatorBtn);
+        buttonBoxCreditCalculator.getChildren().add(creditCalculatorBtn);
+        setButtonStyle(creditCalculatorBtn);
+
+        boxWithButtons.getChildren().add(emptyHBoxForStyleOfButtons);
+        boxWithButtons.getChildren().add(buttonBoxGainsAndLoses);
+        boxWithButtons.getChildren().add(buttonBoxCreditCalculator);
+
+        widthOfWindow = all.getWidth();
+        heightOfWindow = all.getHeight();
+        all.widthProperty().addListener(e -> {
+            widthOfWindow = all.getWidth();
+            boxWithContent.setMinWidth(widthOfWindow - buttonBoxXSize);
+            boxWithContent.setPrefWidth(widthOfWindow - buttonBoxXSize);
+            boxWithContent.setMaxWidth(widthOfWindow - buttonBoxXSize);
+        });
+        all.heightProperty().addListener(e -> {
+            heightOfWindow = all.getHeight();
+            boxWithContent.setMinHeight(heightOfWindow);
+            boxWithContent.setPrefHeight(heightOfWindow);
+            boxWithContent.setMaxHeight(heightOfWindow);
+        });
+    }
+
+    private void gainsAndLosesBtnAcn(VBox boxWithContent) {
+        HBox emptyLineUpTop = new HBox();
+        emptyLineUpTop.setMinHeight(buttonYSize);
+        emptyLineUpTop.setPrefHeight(buttonYSize);
+        emptyLineUpTop.setMaxHeight(buttonYSize);
+
+        HBox dataPanel = new HBox();
+
+        HBox emptyBoxForAliment = new HBox();
+        emptyBoxForAliment.setMinWidth((buttonBoxXSize - buttonXSize) / 2.0);
+
+        HBox boxForTable = new HBox();
+
+        TableView<DataDTO> tableWithData = new TableView<>();
+        TableColumn<DataDTO, String> columnWithCategory = new TableColumn<>("Category");
+
+        tableWithData.getColumns().add(columnWithCategory);
+
+        dataPanel.getChildren().add(emptyBoxForAliment);
+
+        boxWithContent.getChildren().add(emptyLineUpTop);
     }
 
     private void setVboxWidth(VBox vBox, Double width) {
@@ -79,5 +152,20 @@ public class UsersControlController implements Initializable {
         buttonBox.setMinHeight(buttonBoxYSize);
         buttonBox.setPrefHeight(buttonBoxYSize);
         buttonBox.setMaxHeight(buttonBoxYSize);
+    }
+
+    private void setButtonSize(Button button) {
+        button.setPrefWidth(buttonXSize);
+        button.setPrefHeight(buttonYSize);
+        button.setMinWidth(buttonXSize);
+        button.setMinHeight(buttonYSize);
+        button.setMaxWidth(buttonXSize);
+        button.setMaxHeight(buttonYSize);
+    }
+
+    private void setButtonStyle(Button button) {
+        button.styleProperty().bind(Bindings.when(button.hoverProperty())
+                .then(Style.buttonStyleHovered)
+                .otherwise(Style.buttonStyle));
     }
 }
