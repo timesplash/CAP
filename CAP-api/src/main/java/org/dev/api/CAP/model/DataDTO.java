@@ -12,7 +12,5 @@ public class DataDTO {
 
     private String categoryName;
 
-    private Type type;
-
     private Double amount;
 }

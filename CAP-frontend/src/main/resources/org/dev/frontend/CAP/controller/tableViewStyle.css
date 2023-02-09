@@ -1,0 +1,41 @@
+.table-view {
+    -fx-background-color: #3c3c3c;
+    -fx-text-fill: #b5b5b5;
+}
+
+.table-view .column-header {
+    -fx-background-color: #303030;
+    -fx-text-fill: #b5b5b5;
+}
+
+.table-row-cell:even{
+    -fx-background-color: #3c3c3c;
+    -fx-text-fill: #b5b5b5;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: #464646;
+    -fx-text-fill: #b5b5b5;
+}
+
+.table-row-cell:filled:hover {
+    -fx-background-color: #505050;
+    -fx-text-fill: #b5b5b5;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:vertical .track,
+.table-view .virtual-flow .scroll-bar:vertical .track-background,
+.table-view .virtual-flow .scroll-bar:horizontal,
+.table-view .virtual-flow .scroll-bar:horizontal .track,
+.table-view .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color: #303030;
+}
+
+.table-view .column-header .label{
+    -fx-text-fill: #b5b5b5;
+}
