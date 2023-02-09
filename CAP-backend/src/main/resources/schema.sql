@@ -21,6 +21,15 @@ CREATE TABLE IF NOT EXISTS categories
     name        TEXT UNIQUE NOT NULL,
     type        INT NOT NULL,
     range       INT NOT NULL,
-    user_id     INT UNIQUE REFERENCES users (id) ON DELETE CASCADE NOT NULL
+    user_id     INT REFERENCES users (id) ON DELETE CASCADE NOT NULL
 );
 
+
+CREATE TABLE IF NOT EXISTS data
+(
+    id          SERIAL PRIMARY KEY,
+    date        TIMESTAMP NOT NULL,
+    name        TEXT REFERENCES categories(name) ON DELETE CASCADE NOT NULL,
+    amount      DOUBLE PRECISION NOT NULL,
+    username    TEXT REFERENCES users(login) ON DELETE CASCADE NOT NULL
+);

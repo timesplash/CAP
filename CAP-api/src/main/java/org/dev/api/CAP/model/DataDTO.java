@@ -1,7 +1,8 @@
 package org.dev.api.CAP.model;
 
 import lombok.*;
-import org.dev.api.CAP.enums.Type;
+
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,5 +13,9 @@ public class DataDTO {
 
     private String categoryName;
 
+    private LocalDateTime date;
+
     private Double amount;
+
+    private String username;
 }
