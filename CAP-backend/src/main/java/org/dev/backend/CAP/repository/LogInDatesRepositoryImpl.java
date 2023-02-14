@@ -30,9 +30,12 @@ public class LogInDatesRepositoryImpl extends JdbcDaoSupport implements LogInDat
 
     private final CategoriesRepository categoriesRepository;
 
-    LogInDatesRepositoryImpl(DataSource dataSource, UserRepository userRepository, CategoriesRepository categoriesRepository) {
+    private final DataRepository dataRepository;
+
+    LogInDatesRepositoryImpl(DataSource dataSource, UserRepository userRepository, CategoriesRepository categoriesRepository, DataRepository dataRepository) {
         this.userRepository = userRepository;
         this.categoriesRepository = categoriesRepository;
+        this.dataRepository = dataRepository;
         setDataSource(dataSource);
     }
 
@@ -52,6 +55,7 @@ public class LogInDatesRepositoryImpl extends JdbcDaoSupport implements LogInDat
         getJdbcTemplate().update(DELETE_BY_ID, login);
         categoriesRepository.delete(login);
         userRepository.delete(login);
+        dataRepository.deleteWithUser(login);
     }
 
     private static class LogInDatesMapper implements RowMapper<LogInDateDTO> {

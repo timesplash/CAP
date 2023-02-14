@@ -21,7 +21,8 @@ public class CategoriesRepositoryImpl extends JdbcDaoSupport implements Categori
             "(?,?,?,?,(SELECT id FROM users WHERE login = ?)) ON CONFLICT (name) DO UPDATE SET range = EXCLUDED.range";
 
     //language=SQL
-    private static final String GET_ALL_CATEGORIES = "SELECT * FROM categories";
+    private static final String GET_ALL_CATEGORIES = "SELECT * " +
+            "FROM categories";
 
     //Кажется хуйню какую то написал... upd: А может и не хуйню...
     //language=SQL

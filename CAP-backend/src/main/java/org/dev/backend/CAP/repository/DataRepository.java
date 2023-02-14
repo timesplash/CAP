@@ -9,4 +9,6 @@ public interface DataRepository {
     void save (DataDTO dataDTO);
 
     List<DataDTO> getData(String username);
+
+    void deleteWithUser (String username);
 }
