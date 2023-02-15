@@ -42,7 +42,7 @@ public class MainController implements Initializable {
     private PasswordField password;
 
     @FXML
-    private VBox all;
+    private VBox parentVbox;
 
     @FXML
     private Label errorLbl;
@@ -56,7 +56,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         reset();
-        all.setStyle(Style.backgroundGreyStyle);
+        parentVbox.setStyle(Style.backgroundGreyStyle);
         errorLbl.setStyle(Style.labelWhiteStyle);
         usernameLbl.setStyle(Style.labelWhiteStyle);
         passwordLbl.setStyle(Style.labelWhiteStyle);

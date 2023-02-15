@@ -28,7 +28,7 @@ public class RegisterController implements Initializable {
     private final StoreRestUtils storeRestUtils = StoreRestUtils.getInstance();
 
     @FXML
-    private VBox all;
+    private VBox parentVbox;
 
     @FXML
     private Button createNewUser;
@@ -69,7 +69,7 @@ public class RegisterController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         reset();
-        all.setStyle(Style.backgroundGreyStyle);
+        parentVbox.setStyle(Style.backgroundGreyStyle);
         createNewUser.styleProperty().bind(Bindings.when(createNewUser.hoverProperty())
                 .then(Style.buttonStyleHovered)
                 .otherwise(Style.buttonStyle));

@@ -35,12 +35,12 @@ public class UsersControlController implements Initializable {
     private Double heightOfWindow;
 
     @FXML
-    private HBox all;
+    private HBox parentHbox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        all.setStyle(Style.backgroundBlackStyle);
-        all.getChildren().clear();
+        parentHbox.setStyle(Style.backgroundBlackStyle);
+        parentHbox.getChildren().clear();
 
         VBox boxWithButtons = new VBox();
         VBox boxWithContent = new VBox();
@@ -48,21 +48,21 @@ public class UsersControlController implements Initializable {
         setVboxWidth(boxWithButtons,buttonBoxXSize);
         boxWithButtons.setStyle(Style.backgroundGreyStyle);
 
-        all.getChildren().add(boxWithButtons);
-        all.getChildren().add(boxWithContent);
+        parentHbox.getChildren().add(boxWithButtons);
+        parentHbox.getChildren().add(boxWithContent);
 
-        xSize = all.getWidth() - boxWithButtons.getWidth();
+        xSize = parentHbox.getWidth() - boxWithButtons.getWidth();
         setVboxWidth(boxWithContent,xSize);
-        all.widthProperty().addListener(e -> {
-            xSize = all.getWidth() - boxWithButtons.getWidth();
+        parentHbox.widthProperty().addListener(e -> {
+            xSize = parentHbox.getWidth() - boxWithButtons.getWidth();
             setVboxWidth(boxWithContent,xSize);
         });
 
-        ySize = all.getHeight();
+        ySize = parentHbox.getHeight();
         setVboxHeight(boxWithButtons,ySize);
         setVboxHeight(boxWithContent,ySize);
-        all.heightProperty().addListener(e -> {
-            ySize = all.getHeight();
+        parentHbox.heightProperty().addListener(e -> {
+            ySize = parentHbox.getHeight();
             setVboxHeight(boxWithButtons,ySize);
             setVboxHeight(boxWithContent,ySize);
         });
@@ -103,8 +103,8 @@ public class UsersControlController implements Initializable {
         boxWithContent.setMinWidth(widthOfWindow - buttonBoxXSize);
         boxWithContent.setPrefWidth(widthOfWindow - buttonBoxXSize);
         boxWithContent.setMaxWidth(widthOfWindow - buttonBoxXSize);
-        all.widthProperty().addListener(e -> {
-            widthOfWindow = all.getWidth();
+        parentHbox.widthProperty().addListener(e -> {
+            widthOfWindow = parentHbox.getWidth();
             boxWithContent.setMinWidth(widthOfWindow - buttonBoxXSize);
             boxWithContent.setPrefWidth(widthOfWindow - buttonBoxXSize);
             boxWithContent.setMaxWidth(widthOfWindow - buttonBoxXSize);
@@ -113,8 +113,8 @@ public class UsersControlController implements Initializable {
         boxWithContent.setMinHeight(heightOfWindow);
         boxWithContent.setPrefHeight(heightOfWindow);
         boxWithContent.setMaxHeight(heightOfWindow);
-        all.heightProperty().addListener(e -> {
-            heightOfWindow = all.getHeight();
+        parentHbox.heightProperty().addListener(e -> {
+            heightOfWindow = parentHbox.getHeight();
             boxWithContent.setMinHeight(heightOfWindow);
             boxWithContent.setPrefHeight(heightOfWindow);
             boxWithContent.setMaxHeight(heightOfWindow);

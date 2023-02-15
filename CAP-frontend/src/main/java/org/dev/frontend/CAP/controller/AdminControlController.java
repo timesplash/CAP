@@ -33,7 +33,7 @@ public class AdminControlController {
     private final AdminControlStore adminControlStore = AdminControlStore.getStore();
 
     @FXML
-    private HBox all;
+    private HBox parentHbox;
 
     @FXML
     private VBox controlsPanel;
@@ -51,11 +51,11 @@ public class AdminControlController {
     private Button infoBtn;
 
     @FXML
-    public ListView<String> listOfUsers;
+    private ListView<String> listOfUsers;
 
     @FXML
     private void initialize() {
-        all.setStyle(Style.backgroundGreyStyle);
+        parentHbox.setStyle(Style.backgroundGreyStyle);
 
         controlsPanel.setStyle(Style.backgroundGreyStyle);
         dataPanel.setStyle(Style.backgroundBlackStyle);
@@ -75,14 +75,14 @@ public class AdminControlController {
         adminControlStore.populateEntries();
 
         listOfUsers.setItems(adminControlStore.getAllEntries());
-        all.widthProperty().addListener(e -> {
-            widthOfWindow = all.getWidth();
+        parentHbox.widthProperty().addListener(e -> {
+            widthOfWindow = parentHbox.getWidth();
             dataPanel.setMinWidth(widthOfWindow - buttonBoxXSize);
             dataPanel.setPrefWidth(widthOfWindow - buttonBoxXSize);
             dataPanel.setMaxWidth(widthOfWindow - buttonBoxXSize);
         });
-        all.heightProperty().addListener(e -> {
-            heightOfWindow = all.getHeight();
+        parentHbox.heightProperty().addListener(e -> {
+            heightOfWindow = parentHbox.getHeight();
             dataPanel.setMinHeight(heightOfWindow);
             dataPanel.setPrefHeight(heightOfWindow);
             dataPanel.setMaxHeight(heightOfWindow);
