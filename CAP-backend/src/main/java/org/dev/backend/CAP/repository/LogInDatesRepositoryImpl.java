@@ -17,14 +17,14 @@ import java.util.List;
 public class LogInDatesRepositoryImpl extends JdbcDaoSupport implements LogInDatesRepository {
 
     //language=SQL
-    public static final String SAVE_NEW_ENTRY = "INSERT INTO log_in_date (user_id, date) VALUES (?,?)" +
+    private static final String SAVE_NEW_ENTRY = "INSERT INTO log_in_date (user_id, date) VALUES (?,?)" +
             " ON CONFLICT (user_id) DO UPDATE SET date = EXCLUDED.date";
 
     //language=SQL
-    public static final String FIND_ALL = "SELECT * FROM log_in_date";
+    private static final String FIND_ALL = "SELECT * FROM log_in_date";
 
     //language=SQL
-    public static final String DELETE_BY_ID = "DELETE FROM log_in_date WHERE user_id = ?";
+    private static final String DELETE_BY_ID = "DELETE FROM log_in_date WHERE user_id = ?";
 
     private final UserRepository userRepository;
 
@@ -32,7 +32,7 @@ public class LogInDatesRepositoryImpl extends JdbcDaoSupport implements LogInDat
 
     private final DataRepository dataRepository;
 
-    LogInDatesRepositoryImpl(DataSource dataSource, UserRepository userRepository, CategoriesRepository categoriesRepository, DataRepository dataRepository) {
+    public LogInDatesRepositoryImpl(DataSource dataSource, UserRepository userRepository, CategoriesRepository categoriesRepository, DataRepository dataRepository) {
         this.userRepository = userRepository;
         this.categoriesRepository = categoriesRepository;
         this.dataRepository = dataRepository;

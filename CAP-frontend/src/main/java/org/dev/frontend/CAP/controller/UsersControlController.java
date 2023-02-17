@@ -4,12 +4,14 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.dev.api.CAP.model.DataDTO;
 import org.dev.frontend.CAP.Style;
 
@@ -35,12 +37,12 @@ public class UsersControlController implements Initializable {
     private Double heightOfWindow;
 
     @FXML
-    private HBox parentHbox;
+    private HBox parentHBox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        parentHbox.setStyle(Style.backgroundBlackStyle);
-        parentHbox.getChildren().clear();
+        parentHBox.setStyle(Style.backgroundBlackStyle);
+        parentHBox.getChildren().clear();
 
         VBox boxWithButtons = new VBox();
         VBox boxWithContent = new VBox();
@@ -48,21 +50,21 @@ public class UsersControlController implements Initializable {
         setVboxWidth(boxWithButtons,buttonBoxXSize);
         boxWithButtons.setStyle(Style.backgroundGreyStyle);
 
-        parentHbox.getChildren().add(boxWithButtons);
-        parentHbox.getChildren().add(boxWithContent);
+        parentHBox.getChildren().add(boxWithButtons);
+        parentHBox.getChildren().add(boxWithContent);
 
-        xSize = parentHbox.getWidth() - boxWithButtons.getWidth();
+        xSize = parentHBox.getWidth() - boxWithButtons.getWidth();
         setVboxWidth(boxWithContent,xSize);
-        parentHbox.widthProperty().addListener(e -> {
-            xSize = parentHbox.getWidth() - boxWithButtons.getWidth();
+        parentHBox.widthProperty().addListener(e -> {
+            xSize = parentHBox.getWidth() - boxWithButtons.getWidth();
             setVboxWidth(boxWithContent,xSize);
         });
 
-        ySize = parentHbox.getHeight();
+        ySize = parentHBox.getHeight();
         setVboxHeight(boxWithButtons,ySize);
         setVboxHeight(boxWithContent,ySize);
-        parentHbox.heightProperty().addListener(e -> {
-            ySize = parentHbox.getHeight();
+        parentHBox.heightProperty().addListener(e -> {
+            ySize = parentHBox.getHeight();
             setVboxHeight(boxWithButtons,ySize);
             setVboxHeight(boxWithContent,ySize);
         });
@@ -81,7 +83,7 @@ public class UsersControlController implements Initializable {
         setButtonSize(gainsAndLosesBtn);
         buttonBoxGainsAndLoses.getChildren().add(gainsAndLosesBtn);
         setButtonStyle(gainsAndLosesBtn);
-        gainsAndLosesBtn.setOnAction(e -> gainsAndLosesBtnAcn(boxWithContent));
+        gainsAndLosesBtn.setOnAction(e -> openGainsAndLosesPanelBtnAcn(boxWithContent));
 
         HBox buttonBoxCreditCalculator = new HBox();
         setButtonBoxSize(buttonBoxCreditCalculator);
@@ -103,8 +105,8 @@ public class UsersControlController implements Initializable {
         boxWithContent.setMinWidth(widthOfWindow - buttonBoxXSize);
         boxWithContent.setPrefWidth(widthOfWindow - buttonBoxXSize);
         boxWithContent.setMaxWidth(widthOfWindow - buttonBoxXSize);
-        parentHbox.widthProperty().addListener(e -> {
-            widthOfWindow = parentHbox.getWidth();
+        parentHBox.widthProperty().addListener(e -> {
+            widthOfWindow = parentHBox.getWidth();
             boxWithContent.setMinWidth(widthOfWindow - buttonBoxXSize);
             boxWithContent.setPrefWidth(widthOfWindow - buttonBoxXSize);
             boxWithContent.setMaxWidth(widthOfWindow - buttonBoxXSize);
@@ -113,26 +115,25 @@ public class UsersControlController implements Initializable {
         boxWithContent.setMinHeight(heightOfWindow);
         boxWithContent.setPrefHeight(heightOfWindow);
         boxWithContent.setMaxHeight(heightOfWindow);
-        parentHbox.heightProperty().addListener(e -> {
-            heightOfWindow = parentHbox.getHeight();
+        parentHBox.heightProperty().addListener(e -> {
+            heightOfWindow = parentHBox.getHeight();
             boxWithContent.setMinHeight(heightOfWindow);
             boxWithContent.setPrefHeight(heightOfWindow);
             boxWithContent.setMaxHeight(heightOfWindow);
         });
     }
 
-    private void gainsAndLosesBtnAcn(VBox boxWithContent) {
+    /**
+     * @param boxWithContent -
+     */
+    private void openGainsAndLosesPanelBtnAcn(VBox boxWithContent) {
         boxWithContent.getChildren().clear();
 
         HBox emptyLineUpTop = new HBox();
-        emptyLineUpTop.setMinHeight(buttonYSize);
-        emptyLineUpTop.setPrefHeight(buttonYSize);
-        emptyLineUpTop.setMaxHeight(buttonYSize);
+        setEmptyBoxSize(emptyLineUpTop);
 
         HBox emptyLineBottom = new HBox();
-        emptyLineBottom.setMinHeight(buttonYSize);
-        emptyLineBottom.setPrefHeight(buttonYSize);
-        emptyLineBottom.setMaxHeight(buttonYSize);
+        setEmptyBoxSize(emptyLineBottom);
 
         HBox dataPanel = new HBox();
 
@@ -173,6 +174,18 @@ public class UsersControlController implements Initializable {
         VBox boxForButtons = new VBox();
         setVboxWidth(boxForButtons,buttonBoxXSize);
 
+        HBox boxWithAddCategoryButton = new HBox();
+        setButtonBoxSize(boxWithAddCategoryButton);
+
+        Button addCategoryButton = new Button("new category");
+        setButtonSize(addCategoryButton);
+        setButtonStyle(addCategoryButton);
+        addCategoryButton.setAlignment(Pos.CENTER);
+        addCategoryButton.setOnAction(e -> addCategoryBtnAction());
+
+        boxWithAddCategoryButton.getChildren().add(addCategoryButton);
+        boxWithAddCategoryButton.setAlignment(Pos.CENTER);
+
         HBox boxWithAddButton = new HBox();
         setButtonBoxSize(boxWithAddButton);
 
@@ -183,6 +196,8 @@ public class UsersControlController implements Initializable {
 
         boxWithAddButton.getChildren().add(addButton);
         boxWithAddButton.setAlignment(Pos.CENTER);
+
+        boxForButtons.getChildren().add(boxWithAddCategoryButton);
         boxForButtons.getChildren().add(boxWithAddButton);
 
         boxForTable.getChildren().add(tableWithData);
@@ -230,6 +245,16 @@ public class UsersControlController implements Initializable {
         boxWithContent.getChildren().add(emptyLineBottom);
     }
 
+    private void addCategoryBtnAction() {
+        VBox parentVBoxForPopup = new VBox();
+
+
+        Stage popUpWithCategoryStage = new Stage();
+        popUpWithCategoryStage.setMinWidth(800);
+        popUpWithCategoryStage.setMinHeight(400);
+        popUpWithCategoryStage.setScene(new Scene(parentVBoxForPopup,800,400));
+    }
+
     private void setVboxWidth(VBox vBox, Double width) {
         vBox.setMinWidth(width);
         vBox.setPrefWidth(width);
@@ -264,5 +289,11 @@ public class UsersControlController implements Initializable {
         button.styleProperty().bind(Bindings.when(button.hoverProperty())
                 .then(Style.buttonStyleHovered)
                 .otherwise(Style.buttonStyle));
+    }
+
+    private void setEmptyBoxSize(HBox hBox) {
+        hBox.setMinHeight(buttonYSize);
+        hBox.setPrefHeight(buttonYSize);
+        hBox.setMaxHeight(buttonYSize);
     }
 }

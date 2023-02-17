@@ -17,14 +17,14 @@ import java.util.List;
 public class DataRepositoryImpl extends JdbcDaoSupport implements DataRepository {
 
     //language=SQL
-    public static final String SAVE_REQUEST = "INSERT INTO data(name, date, amount, username) VALUES (?,?,?,?) ON CONFLICT"+
+    private static final String SAVE_REQUEST = "INSERT INTO data(name, date, amount, username) VALUES (?,?,?,?) ON CONFLICT"+
             " (date, name, username) DO UPDATE SET amount = EXCLUDED.amount";
 
     //language=SQL
-    public static final String DELETE_WITH_USER_REQUEST = "DELETE FROM data WHERE username = ?";
+    private static final String DELETE_WITH_USER_REQUEST = "DELETE FROM data WHERE username = ?";
 
     //language=SQL
-    public static final String FIND_FOR_USER_REQUEST = "SELECT * FROM data WHERE username = ?";
+    private static final String FIND_FOR_USER_REQUEST = "SELECT * FROM data WHERE username = ?";
 
     public DataRepositoryImpl(DataSource dataSource){
         setDataSource(dataSource);

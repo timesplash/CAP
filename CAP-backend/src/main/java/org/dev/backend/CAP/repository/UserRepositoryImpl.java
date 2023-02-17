@@ -19,23 +19,23 @@ import java.util.Optional;
 public class UserRepositoryImpl extends JdbcDaoSupport implements UserRepository {
 
     //language=SQL
-    public static final String SAVE_USER_REQUEST = "INSERT INTO users (login, password, role, question, answer)" +
+    private static final String SAVE_USER_REQUEST = "INSERT INTO users (login, password, role, question, answer)" +
             "VALUES (?,?,?,?,?) ON CONFLICT (login) DO UPDATE SET (login, password, role, question, answer)" +
             "= (EXCLUDED.login,EXCLUDED.password, EXCLUDED.role, EXCLUDED.question, EXCLUDED.answer)";
 
     //language=SQL
-    public static final String DELETE_USER_REQUEST = "DELETE FROM users WHERE login = ?";
+    private static final String DELETE_USER_REQUEST = "DELETE FROM users WHERE login = ?";
 
     //language=SQL
-    public static final String FIND_BY_LOGIN = "SELECT * FROM users WHERE login = ?";
+    private static final String FIND_BY_LOGIN = "SELECT * FROM users WHERE login = ?";
 
     //language=SQL
-    public static final String FIND_ALL = "SELECT * FROM users";
+    private static final String FIND_ALL = "SELECT * FROM users";
 
     //language=SQL
-    public static final String FIND_NAME_BY_ID = "SELECT login FROM users WHERE id = ?";
+    private static final String FIND_NAME_BY_ID = "SELECT login FROM users WHERE id = ?";
 
-    UserRepositoryImpl(DataSource dataSource){setDataSource(dataSource);}
+    public UserRepositoryImpl(DataSource dataSource){setDataSource(dataSource);}
 
     @Override
     public void save(User user) {

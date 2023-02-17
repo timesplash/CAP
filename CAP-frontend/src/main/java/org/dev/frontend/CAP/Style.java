@@ -1,6 +1,11 @@
 package org.dev.frontend.CAP;
 
 public class Style {
+
+    /*TODO: refactor to the .css format
+    NOTE: rename constants to Java conventions (buttonStyle -> BUTTON_STYLE)
+     */
+
     public static final String buttonStyle = "-fx-background-radius: 10; -fx-background-color: #797979, #464646; -fx-text-fill: white";
     public static final String buttonStyleHovered = "-fx-background-radius: 10; -fx-background-color: #797979, #404040; -fx-text-fill: #b5b5b5";
     public static final String buttonBorderlessStyle = "-fx-background-color: #515151; -fx-text-fill: white";
