@@ -5,13 +5,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.dev.api.CAP.enums.Type;
 import org.dev.api.CAP.model.DataDTO;
 import org.dev.frontend.CAP.Style;
 
@@ -97,7 +96,6 @@ public class UsersControlController implements Initializable {
         boxWithButtons.getChildren().add(buttonBoxGainsAndLoses);
         boxWithButtons.getChildren().add(buttonBoxCreditCalculator);
 
-
         widthOfWindow = 800.0;
         heightOfWindow = 600.0;
         setVboxWidth(boxWithContent,widthOfWindow - buttonBoxXSize);
@@ -114,7 +112,7 @@ public class UsersControlController implements Initializable {
     }
 
     /**
-     * @param boxWithContent
+     * @param boxWithContent - right side of the window, containing data selected with buttons on the left
      */
     private void openGainsAndLosesPanelBtnAcn(VBox boxWithContent) {
         boxWithContent.getChildren().clear();
@@ -175,21 +173,75 @@ public class UsersControlController implements Initializable {
         String css = Objects.requireNonNull(this.getClass().getResource("tableViewStyle.css")).toExternalForm();
         tableWithData.getStylesheets().add(css);
 
-        tableWithData.widthProperty().addListener(e -> {
-            setStingColumnWidth(columnWithCategory, tableWithData.getWidth() - buttonXSize * 3 / 4);
-        });
+        tableWithData.widthProperty().addListener(e -> setStingColumnWidth(columnWithCategory,
+                tableWithData.getWidth() - buttonXSize * 3 / 4));
 
         setUpPanelWithData(boxWithContent,dataPanel,boxForTable,boxForButtons,true);
     }
 
     private void addCategoryBtnAction() {
         VBox parentVBoxForPopup = new VBox();
+        parentVBoxForPopup.setAlignment(Pos.CENTER);
+        parentVBoxForPopup.setStyle(Style.backgroundBlackStyle);
 
+        HBox emptyBoxUpTop = new HBox();
+        setEmptyBoxSize(emptyBoxUpTop);
+
+        HBox categoryNameBox = new HBox();
+        HBox categoryNameLblBox = new HBox();
+        HBox categoryNameTxtBox = new HBox();
+
+        Label categoryNameLbl = new Label("Category name: ");
+        setLblStyle(categoryNameLbl);
+
+        TextField categoryTxtField = new TextField();
+        categoryTxtField.setText("");
+        categoryTxtField.setMinWidth(300);
+        categoryTxtField.setStyle(Style.textFieldStyle);
+
+        setUpLabelAndTextOrComboBoxContainers(categoryNameBox,categoryNameLblBox,categoryNameTxtBox);
+
+        categoryNameLblBox.getChildren().add(categoryNameLbl);
+        categoryNameTxtBox.getChildren().add(categoryTxtField);
+
+        HBox typeBox = new HBox();
+        HBox typeLblBox = new HBox();
+        HBox typeComboBoxContainer = new HBox();
+
+        setUpLabelAndTextOrComboBoxContainers(typeBox,typeLblBox,typeComboBoxContainer);
+
+        Label typeLbl = new Label("Type: ");
+        setLblStyle(typeLbl);
+
+        ComboBox<Type> type = new ComboBox<>();
+        type.getItems().addAll(Type.values());
+        setComboBoxTypeStyle(type);
+
+        typeLblBox.getChildren().add(typeLbl);
+        typeComboBoxContainer.getChildren().add(type);
+
+        HBox errorBox = new HBox();
+        setHBoxHeight(errorBox, buttonBoxYSize);
+
+        HBox saveButtonBox = new HBox();
+        Button saveBtn = new Button("Save");
+        setButtonBoxSize(saveButtonBox);
+        setButtonSize(saveBtn);
+        setButtonStyle(saveBtn);
+        saveButtonBox.getChildren().add(saveBtn);
+
+        parentVBoxForPopup.getChildren().add(emptyBoxUpTop);
+        parentVBoxForPopup.getChildren().add(categoryNameBox);
+        parentVBoxForPopup.getChildren().add(typeBox);
+        parentVBoxForPopup.getChildren().add(errorBox);
+        parentVBoxForPopup.getChildren().add(saveButtonBox);
 
         Stage popUpWithCategoryStage = new Stage();
-        popUpWithCategoryStage.setMinWidth(800);
-        popUpWithCategoryStage.setMinHeight(400);
-        popUpWithCategoryStage.setScene(new Scene(parentVBoxForPopup,800,400));
+        popUpWithCategoryStage.setMinWidth(500);
+        popUpWithCategoryStage.setMinHeight(200);
+        popUpWithCategoryStage.setScene(new Scene(parentVBoxForPopup,500,200));
+        popUpWithCategoryStage.show();
+        popUpWithCategoryStage.setResizable(false);
     }
 
     private void setVboxWidth(VBox vBox, Double width) {
@@ -235,9 +287,8 @@ public class UsersControlController implements Initializable {
     }
 
     private void setButtonStyle(Button button) {
-        button.styleProperty().bind(Bindings.when(button.hoverProperty())
-                .then(Style.buttonStyleHovered)
-                .otherwise(Style.buttonStyle));
+        String css = Objects.requireNonNull(this.getClass().getResource("buttonStyle.css")).toExternalForm();
+        button.getStylesheets().add(css);
     }
 
     private void setEmptyBoxSize(HBox hBox) {
@@ -270,6 +321,29 @@ public class UsersControlController implements Initializable {
         tableColumn.setMaxWidth(width);
     }
 
+    private void setLblStyle (Label label) {
+        label.setAlignment(Pos.CENTER);
+        label.setStyle(Style.labelBrightGreyStyle);
+    }
+
+    private void setComboBoxTypeStyle (ComboBox<Type> comboBox) {
+        String css = Objects.requireNonNull(this.getClass().getResource("comboboxStyle.css")).toExternalForm();
+        comboBox.getStylesheets().add(css);
+    }
+
+    private void setUpLabelAndTextOrComboBoxContainers(HBox wholeLineBox, HBox leftBox, HBox rightBox){
+        setHBoxWidth(leftBox,150.0);
+        setHBoxHeight(leftBox, buttonBoxYSize);
+        leftBox.setAlignment(Pos.CENTER_RIGHT);
+
+        setHBoxWidth(rightBox,350.0);
+        setHBoxHeight(rightBox, buttonBoxYSize);
+        rightBox.setAlignment(Pos.CENTER_LEFT);
+
+        wholeLineBox.getChildren().add(leftBox);
+        wholeLineBox.getChildren().add(rightBox);
+    }
+
     private void setUpPanelWithData(VBox boxWithContent, HBox dataPanel, HBox centralBox, VBox buttonsBox, Boolean buttonsBoxPresent) {
         HBox emptyLineUpTop = new HBox();
         setEmptyBoxSize(emptyLineUpTop);
@@ -282,12 +356,8 @@ public class UsersControlController implements Initializable {
 
         setHBoxHeight(dataPanel,heightOfWindow - 2 * buttonYSize);
         setHBoxWidth(dataPanel, widthOfWindow - buttonBoxXSize);
-        boxWithContent.heightProperty().addListener(e -> {
-            setHBoxHeight(dataPanel,boxWithContent.getHeight() - 2 * buttonYSize);
-        });
-        boxWithContent.widthProperty().addListener(e -> {
-            setHBoxWidth(dataPanel, boxWithContent.getWidth());
-        });
+        boxWithContent.heightProperty().addListener(e -> setHBoxHeight(dataPanel,boxWithContent.getHeight() - 2 * buttonYSize));
+        boxWithContent.widthProperty().addListener(e -> setHBoxWidth(dataPanel, boxWithContent.getWidth()));
 
         dataPanel.getChildren().add(emptyBoxForAliment);
         dataPanel.getChildren().add(centralBox);
@@ -295,9 +365,7 @@ public class UsersControlController implements Initializable {
 
         setCentralBoxWidth(dataPanel,centralBox,buttonsBoxPresent);
 
-        dataPanel.widthProperty().addListener(e -> {
-            setCentralBoxWidth(dataPanel,centralBox,buttonsBoxPresent);
-        });
+        dataPanel.widthProperty().addListener(e -> setCentralBoxWidth(dataPanel,centralBox,buttonsBoxPresent));
 
         boxWithContent.getChildren().add(emptyLineUpTop);
         boxWithContent.getChildren().add(dataPanel);

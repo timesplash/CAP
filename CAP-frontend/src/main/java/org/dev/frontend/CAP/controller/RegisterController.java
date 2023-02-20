@@ -70,9 +70,7 @@ public class RegisterController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         reset();
         parentVbox.setStyle(Style.backgroundGreyStyle);
-        createNewUser.styleProperty().bind(Bindings.when(createNewUser.hoverProperty())
-                .then(Style.buttonStyleHovered)
-                .otherwise(Style.buttonStyle));
+        setButtonStyle(createNewUser);
         usernameLbl.setStyle(Style.labelWhiteStyle);
         passwordLbl.setStyle(Style.labelWhiteStyle);
         questionLbl.setStyle(Style.labelWhiteStyle);
@@ -83,7 +81,6 @@ public class RegisterController implements Initializable {
         password.setStyle(Style.textFieldStyle);
         question.setStyle(Style.textFieldStyle);
         answer.setStyle(Style.textFieldStyle);
-        role.setStyle(Style.textFieldStyle);
 
         username.textProperty().bindBidirectional(registerStore.getLogin());
         password.textProperty().bindBidirectional(registerStore.getPassword());
@@ -131,5 +128,10 @@ public class RegisterController implements Initializable {
         password.setText("");
         question.setText("");
         answer.setText("");
+    }
+
+    private void setButtonStyle(Button button) {
+        String css = Objects.requireNonNull(this.getClass().getResource("buttonStyle.css")).toExternalForm();
+        button.getStylesheets().add(css);
     }
 }

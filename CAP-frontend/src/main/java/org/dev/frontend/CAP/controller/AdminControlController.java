@@ -61,15 +61,9 @@ public class AdminControlController {
         dataPanel.setStyle(Style.backgroundBlackStyle);
         dataPanel.getChildren().clear();
 
-        outdatedUsersBtn.styleProperty().bind(Bindings.when(outdatedUsersBtn.hoverProperty())
-                .then(Style.buttonStyleHovered)
-                .otherwise(Style.buttonStyle));
-        categoriesRequestBtn.styleProperty().bind(Bindings.when(categoriesRequestBtn.hoverProperty())
-                .then(Style.buttonStyleHovered)
-                .otherwise(Style.buttonStyle));
-        infoBtn.styleProperty().bind(Bindings.when(infoBtn.hoverProperty())
-                .then(Style.buttonStyleHovered)
-                .otherwise(Style.buttonStyle));
+        setButtonStyle(outdatedUsersBtn);
+        setButtonStyle(categoriesRequestBtn);
+        setButtonStyle(infoBtn);
 
         adminControlStore.refreshStore();
         adminControlStore.populateEntries();
@@ -119,9 +113,7 @@ public class AdminControlController {
 
         Button deleteBtn = new Button();
         deleteBtn.setText("Delete user");
-        deleteBtn.styleProperty().bind(Bindings.when(deleteBtn.hoverProperty())
-                .then(Style.buttonStyleHovered)
-                .otherwise(Style.buttonStyle));
+        setButtonStyle(deleteBtn);
         deleteBtn.setOnAction(e -> deleteBtnAction());
 
 
@@ -190,5 +182,10 @@ public class AdminControlController {
         adminControlStore.populateEntries();
 
         listOfUsers.setItems(adminControlStore.getAllEntries());
+    }
+
+    private void setButtonStyle(Button button) {
+        String css = Objects.requireNonNull(this.getClass().getResource("buttonStyle.css")).toExternalForm();
+        button.getStylesheets().add(css);
     }
 }
