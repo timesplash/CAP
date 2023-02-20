@@ -70,9 +70,7 @@ public class UsersControlController implements Initializable {
         });
 
         HBox emptyHBoxForStyleOfButtons = new HBox();
-        emptyHBoxForStyleOfButtons.setMinHeight(buttonYSize);
-        emptyHBoxForStyleOfButtons.setPrefHeight(buttonYSize);
-        emptyHBoxForStyleOfButtons.setMaxHeight(buttonYSize);
+        setEmptyBoxSize(emptyHBoxForStyleOfButtons);
 
         HBox buttonBoxGainsAndLoses = new HBox();
         setButtonBoxSize(buttonBoxGainsAndLoses);
@@ -102,47 +100,26 @@ public class UsersControlController implements Initializable {
 
         widthOfWindow = 800.0;
         heightOfWindow = 600.0;
-        boxWithContent.setMinWidth(widthOfWindow - buttonBoxXSize);
-        boxWithContent.setPrefWidth(widthOfWindow - buttonBoxXSize);
-        boxWithContent.setMaxWidth(widthOfWindow - buttonBoxXSize);
+        setVboxWidth(boxWithContent,widthOfWindow - buttonBoxXSize);
         parentHBox.widthProperty().addListener(e -> {
             widthOfWindow = parentHBox.getWidth();
-            boxWithContent.setMinWidth(widthOfWindow - buttonBoxXSize);
-            boxWithContent.setPrefWidth(widthOfWindow - buttonBoxXSize);
-            boxWithContent.setMaxWidth(widthOfWindow - buttonBoxXSize);
+            setVboxWidth(boxWithContent,widthOfWindow - buttonBoxXSize);
         });
 
-        boxWithContent.setMinHeight(heightOfWindow);
-        boxWithContent.setPrefHeight(heightOfWindow);
-        boxWithContent.setMaxHeight(heightOfWindow);
+        setVboxHeight(boxWithContent,heightOfWindow);
         parentHBox.heightProperty().addListener(e -> {
             heightOfWindow = parentHBox.getHeight();
-            boxWithContent.setMinHeight(heightOfWindow);
-            boxWithContent.setPrefHeight(heightOfWindow);
-            boxWithContent.setMaxHeight(heightOfWindow);
+            setVboxHeight(boxWithContent,heightOfWindow);
         });
     }
 
     /**
-     * @param boxWithContent -
+     * @param boxWithContent
      */
     private void openGainsAndLosesPanelBtnAcn(VBox boxWithContent) {
         boxWithContent.getChildren().clear();
 
-        HBox emptyLineUpTop = new HBox();
-        setEmptyBoxSize(emptyLineUpTop);
-
-        HBox emptyLineBottom = new HBox();
-        setEmptyBoxSize(emptyLineBottom);
-
         HBox dataPanel = new HBox();
-
-        HBox emptyBoxForAliment = new HBox();
-        emptyBoxForAliment.setMinWidth((buttonBoxXSize - buttonXSize) / 2.0);
-        emptyBoxForAliment.setMaxWidth((buttonBoxXSize - buttonXSize) / 2.0);
-        emptyBoxForAliment.setPrefWidth((buttonBoxXSize - buttonXSize) / 2.0);
-
-        HBox boxForTable = new HBox();
 
         TableView<DataDTO> tableWithData = new TableView<>();
         TableColumn<DataDTO, String> columnWithCategory = new TableColumn<>("Category");
@@ -153,23 +130,6 @@ public class UsersControlController implements Initializable {
 
         tableWithData.getColumns().add(columnWithCategory);
         tableWithData.getColumns().add(columnWithValue);
-
-        dataPanel.setMinHeight(heightOfWindow - 2 * buttonYSize);
-        dataPanel.setMaxHeight(heightOfWindow - 2 * buttonYSize);
-        dataPanel.setPrefHeight(heightOfWindow - 2 * buttonYSize);
-        dataPanel.setMinWidth(widthOfWindow - buttonBoxXSize);
-        dataPanel.setMaxWidth(widthOfWindow - buttonBoxXSize);
-        dataPanel.setPrefWidth(widthOfWindow - buttonBoxXSize);
-        boxWithContent.heightProperty().addListener(e -> {
-            dataPanel.setMinHeight(boxWithContent.getHeight() - 2 * buttonYSize);
-            dataPanel.setMaxHeight(boxWithContent.getHeight() - 2 * buttonYSize);
-            dataPanel.setPrefHeight(boxWithContent.getHeight() - 2 * buttonYSize);
-        });
-        boxWithContent.widthProperty().addListener(e -> {
-            dataPanel.setMinWidth(boxWithContent.getWidth());
-            dataPanel.setMaxWidth(boxWithContent.getWidth());
-            dataPanel.setPrefWidth(boxWithContent.getWidth());
-        });
 
         VBox boxForButtons = new VBox();
         setVboxWidth(boxForButtons,buttonBoxXSize);
@@ -200,49 +160,26 @@ public class UsersControlController implements Initializable {
         boxForButtons.getChildren().add(boxWithAddCategoryButton);
         boxForButtons.getChildren().add(boxWithAddButton);
 
+        HBox boxForTable = new HBox();
         boxForTable.getChildren().add(tableWithData);
 
-        boxForTable.setMinWidth(dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-        boxForTable.setMaxWidth(dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-        boxForTable.setPrefWidth(dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-        tableWithData.setMinWidth(dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-        tableWithData.setMaxWidth(dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-        tableWithData.setPrefWidth(dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-        columnWithValue.setMinWidth(buttonXSize * 3 / 4);
-        columnWithValue.setPrefWidth(buttonXSize * 3 / 4);
-        columnWithValue.setMaxWidth(buttonXSize * 3 / 4);
-        columnWithCategory.setMinWidth(tableWithData.getWidth() - buttonXSize * 3 / 4);
-        columnWithCategory.setPrefWidth(tableWithData.getWidth() - buttonXSize * 3 / 4);
-        columnWithCategory.setMaxWidth(tableWithData.getWidth() - buttonXSize * 3 / 4);
+        setTableWidth(tableWithData, dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
+        setDoubleColumnWidth(columnWithValue, buttonXSize * 3 / 4);
+        setStingColumnWidth(columnWithCategory, tableWithData.getWidth() - buttonXSize * 3 / 4);
 
         dataPanel.widthProperty().addListener(e -> {
-            boxForTable.setMinWidth(dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-            boxForTable.setMaxWidth(dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-            boxForTable.setPrefWidth(dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-            tableWithData.setMinWidth(dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-            tableWithData.setMaxWidth(dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-            tableWithData.setPrefWidth(dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-            columnWithCategory.setMinWidth(tableWithData.getWidth() - buttonXSize * 3 / 4);
-            columnWithCategory.setPrefWidth(tableWithData.getWidth() - buttonXSize * 3 / 4);
-            columnWithCategory.setMaxWidth(tableWithData.getWidth() - buttonXSize * 3 / 4);
+            setTableWidth(tableWithData, dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
+            setStingColumnWidth(columnWithCategory, tableWithData.getWidth() - buttonXSize * 3 / 4);
         });
 
         String css = Objects.requireNonNull(this.getClass().getResource("tableViewStyle.css")).toExternalForm();
         tableWithData.getStylesheets().add(css);
 
         tableWithData.widthProperty().addListener(e -> {
-            columnWithCategory.setMinWidth(tableWithData.getWidth() - buttonXSize * 3 / 4);
-            columnWithCategory.setPrefWidth(tableWithData.getWidth() - buttonXSize * 3 / 4);
-            columnWithCategory.setMaxWidth(tableWithData.getWidth() - buttonXSize * 3 / 4);
+            setStingColumnWidth(columnWithCategory, tableWithData.getWidth() - buttonXSize * 3 / 4);
         });
 
-        dataPanel.getChildren().add(emptyBoxForAliment);
-        dataPanel.getChildren().add(boxForTable);
-        dataPanel.getChildren().add(boxForButtons);
-
-        boxWithContent.getChildren().add(emptyLineUpTop);
-        boxWithContent.getChildren().add(dataPanel);
-        boxWithContent.getChildren().add(emptyLineBottom);
+        setUpPanelWithData(boxWithContent,dataPanel,boxForTable,boxForButtons,true);
     }
 
     private void addCategoryBtnAction() {
@@ -265,6 +202,18 @@ public class UsersControlController implements Initializable {
         vBox.setMinHeight(height);
         vBox.setPrefHeight(height);
         vBox.setMaxHeight(height);
+    }
+
+    private void setHBoxWidth(HBox hBox, Double width) {
+        hBox.setMinWidth(width);
+        hBox.setPrefWidth(width);
+        hBox.setMaxWidth(width);
+    }
+
+    private void setHBoxHeight(HBox hBox, Double height) {
+        hBox.setMinHeight(height);
+        hBox.setPrefHeight(height);
+        hBox.setMaxHeight(height);
     }
 
     private void setButtonBoxSize(HBox buttonBox) {
@@ -295,5 +244,71 @@ public class UsersControlController implements Initializable {
         hBox.setMinHeight(buttonYSize);
         hBox.setPrefHeight(buttonYSize);
         hBox.setMaxHeight(buttonYSize);
+    }
+
+    private void setEmptyBoxForAlimentSize(HBox emptyBoxForAliment) {
+        emptyBoxForAliment.setMinWidth((buttonBoxXSize - buttonXSize) / 2.0);
+        emptyBoxForAliment.setMaxWidth((buttonBoxXSize - buttonXSize) / 2.0);
+        emptyBoxForAliment.setPrefWidth((buttonBoxXSize - buttonXSize) / 2.0);
+    }
+
+    private void setTableWidth(TableView<DataDTO> table, Double width) {
+        table.setMinWidth(width);
+        table.setMaxWidth(width);
+        table.setPrefWidth(width);
+    }
+
+    private void setStingColumnWidth(TableColumn<DataDTO, String> tableColumn, Double width) {
+        tableColumn.setMinWidth(width);
+        tableColumn.setPrefWidth(width);
+        tableColumn.setMaxWidth(width);
+    }
+
+    private void setDoubleColumnWidth(TableColumn<DataDTO, Double> tableColumn, Double width) {
+        tableColumn.setMinWidth(width);
+        tableColumn.setPrefWidth(width);
+        tableColumn.setMaxWidth(width);
+    }
+
+    private void setUpPanelWithData(VBox boxWithContent, HBox dataPanel, HBox centralBox, VBox buttonsBox, Boolean buttonsBoxPresent) {
+        HBox emptyLineUpTop = new HBox();
+        setEmptyBoxSize(emptyLineUpTop);
+
+        HBox emptyLineBottom = new HBox();
+        setEmptyBoxSize(emptyLineBottom);
+
+        HBox emptyBoxForAliment = new HBox();
+        setEmptyBoxForAlimentSize(emptyBoxForAliment);
+
+        setHBoxHeight(dataPanel,heightOfWindow - 2 * buttonYSize);
+        setHBoxWidth(dataPanel, widthOfWindow - buttonBoxXSize);
+        boxWithContent.heightProperty().addListener(e -> {
+            setHBoxHeight(dataPanel,boxWithContent.getHeight() - 2 * buttonYSize);
+        });
+        boxWithContent.widthProperty().addListener(e -> {
+            setHBoxWidth(dataPanel, boxWithContent.getWidth());
+        });
+
+        dataPanel.getChildren().add(emptyBoxForAliment);
+        dataPanel.getChildren().add(centralBox);
+        dataPanel.getChildren().add(buttonsBox);
+
+        setCentralBoxWidth(dataPanel,centralBox,buttonsBoxPresent);
+
+        dataPanel.widthProperty().addListener(e -> {
+            setCentralBoxWidth(dataPanel,centralBox,buttonsBoxPresent);
+        });
+
+        boxWithContent.getChildren().add(emptyLineUpTop);
+        boxWithContent.getChildren().add(dataPanel);
+        boxWithContent.getChildren().add(emptyLineBottom);
+    }
+
+    private void setCentralBoxWidth (HBox dataPanel, HBox centralBox, Boolean buttonsBoxPresent) {
+        if (buttonsBoxPresent) {
+            setHBoxWidth(centralBox, dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
+        } else {
+            setHBoxWidth(centralBox, dataPanel.getWidth() - (buttonBoxXSize - buttonXSize) / 2.0);
+        }
     }
 }
