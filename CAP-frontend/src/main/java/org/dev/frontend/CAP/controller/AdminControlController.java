@@ -33,19 +33,7 @@ public class AdminControlController {
     private HBox parentHBox;
 
     @FXML
-    private VBox controlsPanel;
-
-    @FXML
     private VBox dataPanel;
-
-    @FXML
-    private Button outdatedUsersBtn;
-
-    @FXML
-    private Button categoriesRequestBtn;
-
-    @FXML
-    private Button infoBtn;
 
     @FXML
     private ListView<String> listOfUsers;

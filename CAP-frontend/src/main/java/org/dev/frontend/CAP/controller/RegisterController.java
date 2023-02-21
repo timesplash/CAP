@@ -2,18 +2,15 @@ package org.dev.frontend.CAP.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import org.dev.api.CAP.model.LogInDateDTO;
 import org.dev.frontend.CAP.store.RegisterStore;
 import org.dev.frontend.CAP.store.StoreRestUtils;
 
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -24,24 +21,6 @@ public class RegisterController implements Initializable {
     private final RegisterStore registerStore = RegisterStore.getStore();
 
     private final StoreRestUtils storeRestUtils = StoreRestUtils.getInstance();
-
-    @FXML
-    private VBox parentVbox;
-
-    @FXML
-    private Button createNewUser;
-
-    @FXML
-    private Label usernameLbl;
-
-    @FXML
-    private Label passwordLbl;
-
-    @FXML
-    private Label questionLbl;
-
-    @FXML
-    private Label answerLbl;
 
     @FXML
     private Label roleLbl;

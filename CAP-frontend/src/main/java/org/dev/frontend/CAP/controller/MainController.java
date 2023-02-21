@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dev.api.CAP.enums.Role;
 import org.dev.api.CAP.model.LogInDateDTO;
@@ -28,9 +27,6 @@ public class MainController implements Initializable {
     private final StoreRestUtils storeRestUtils = StoreRestUtils.getInstance();
 
     @FXML
-    private Button register;
-
-    @FXML
     private Button logInBtn;
 
     @FXML
@@ -40,16 +36,7 @@ public class MainController implements Initializable {
     private PasswordField password;
 
     @FXML
-    private VBox parentVbox;
-
-    @FXML
     private Label errorLbl;
-
-    @FXML
-    private Label usernameLbl;
-
-    @FXML
-    private Label passwordLbl;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
