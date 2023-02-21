@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="280.0" prefWidth="381.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dev.frontend.CAP.controller.MainController">
+<AnchorPane prefHeight="280.0" prefWidth="381.0" stylesheets="@mainWindowStyle.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dev.frontend.CAP.controller.MainController">
    <children>
       <VBox fx:id="parentVbox" prefHeight="284.0" prefWidth="427.0">
          <children>

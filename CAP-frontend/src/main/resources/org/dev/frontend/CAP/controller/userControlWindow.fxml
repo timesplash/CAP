@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 
-<HBox fx:id="parentHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dev.frontend.CAP.controller.UsersControlController" />
+<HBox fx:id="parentHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@userControlWindowStyle.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dev.frontend.CAP.controller.UsersControlController">
+   <children>
+      <VBox fx:id="boxWithButtons" prefHeight="600.0" prefWidth="234.0" />
+      <VBox fx:id="boxWithContent" prefHeight="600.0" prefWidth="569.0" />
+   </children>
+</HBox>

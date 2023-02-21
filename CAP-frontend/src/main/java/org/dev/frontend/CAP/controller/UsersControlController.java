@@ -1,6 +1,5 @@
 package org.dev.frontend.CAP.controller;
 
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -12,10 +11,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dev.api.CAP.enums.Type;
 import org.dev.api.CAP.model.DataDTO;
-import org.dev.frontend.CAP.Style;
 
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class UsersControlController implements Initializable {
@@ -38,16 +35,17 @@ public class UsersControlController implements Initializable {
     @FXML
     private HBox parentHBox;
 
+    @FXML
+    private VBox boxWithButtons;
+
+    @FXML
+    private VBox boxWithContent;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        parentHBox.setStyle(Style.backgroundBlackStyle);
         parentHBox.getChildren().clear();
 
-        VBox boxWithButtons = new VBox();
-        VBox boxWithContent = new VBox();
-
         setVboxWidth(boxWithButtons,buttonBoxXSize);
-        boxWithButtons.setStyle(Style.backgroundGreyStyle);
 
         parentHBox.getChildren().add(boxWithButtons);
         parentHBox.getChildren().add(boxWithContent);
@@ -79,7 +77,6 @@ public class UsersControlController implements Initializable {
         gainsAndLosesBtn.setText("Gains and spending");
         setButtonSize(gainsAndLosesBtn);
         buttonBoxGainsAndLoses.getChildren().add(gainsAndLosesBtn);
-        setButtonStyle(gainsAndLosesBtn);
         gainsAndLosesBtn.setOnAction(e -> openGainsAndLosesPanelBtnAcn(boxWithContent));
 
         HBox buttonBoxCreditCalculator = new HBox();
@@ -90,7 +87,6 @@ public class UsersControlController implements Initializable {
         creditCalculatorBtn.setText("Credit calculator");
         setButtonSize(creditCalculatorBtn);
         buttonBoxCreditCalculator.getChildren().add(creditCalculatorBtn);
-        setButtonStyle(creditCalculatorBtn);
 
         boxWithButtons.getChildren().add(emptyHBoxForStyleOfButtons);
         boxWithButtons.getChildren().add(buttonBoxGainsAndLoses);
@@ -137,7 +133,6 @@ public class UsersControlController implements Initializable {
 
         Button addCategoryButton = new Button("new category");
         setButtonSize(addCategoryButton);
-        setButtonStyle(addCategoryButton);
         addCategoryButton.setAlignment(Pos.CENTER);
         addCategoryButton.setOnAction(e -> addCategoryBtnAction());
 
@@ -149,7 +144,6 @@ public class UsersControlController implements Initializable {
 
         Button addButton = new Button("add");
         setButtonSize(addButton);
-        setButtonStyle(addButton);
         addButton.setAlignment(Pos.CENTER);
 
         boxWithAddButton.getChildren().add(addButton);
@@ -170,9 +164,6 @@ public class UsersControlController implements Initializable {
             setStingColumnWidth(columnWithCategory, tableWithData.getWidth() - buttonXSize * 3 / 4);
         });
 
-        String css = Objects.requireNonNull(this.getClass().getResource("tableViewStyle.css")).toExternalForm();
-        tableWithData.getStylesheets().add(css);
-
         tableWithData.widthProperty().addListener(e -> setStingColumnWidth(columnWithCategory,
                 tableWithData.getWidth() - buttonXSize * 3 / 4));
 
@@ -182,7 +173,6 @@ public class UsersControlController implements Initializable {
     private void addCategoryBtnAction() {
         VBox parentVBoxForPopup = new VBox();
         parentVBoxForPopup.setAlignment(Pos.CENTER);
-        parentVBoxForPopup.setStyle(Style.backgroundBlackStyle);
 
         HBox emptyBoxUpTop = new HBox();
         setEmptyBoxSize(emptyBoxUpTop);
@@ -192,12 +182,10 @@ public class UsersControlController implements Initializable {
         HBox categoryNameTxtBox = new HBox();
 
         Label categoryNameLbl = new Label("Category name: ");
-        setLblStyle(categoryNameLbl);
 
         TextField categoryTxtField = new TextField();
         categoryTxtField.setText("");
         categoryTxtField.setMinWidth(300);
-        categoryTxtField.setStyle(Style.textFieldStyle);
 
         setUpLabelAndTextOrComboBoxContainers(categoryNameBox,categoryNameLblBox,categoryNameTxtBox);
 
@@ -211,11 +199,8 @@ public class UsersControlController implements Initializable {
         setUpLabelAndTextOrComboBoxContainers(typeBox,typeLblBox,typeComboBoxContainer);
 
         Label typeLbl = new Label("Type: ");
-        setLblStyle(typeLbl);
-
         ComboBox<Type> type = new ComboBox<>();
         type.getItems().addAll(Type.values());
-        setComboBoxTypeStyle(type);
 
         typeLblBox.getChildren().add(typeLbl);
         typeComboBoxContainer.getChildren().add(type);
@@ -227,7 +212,6 @@ public class UsersControlController implements Initializable {
         Button saveBtn = new Button("Save");
         setButtonBoxSize(saveButtonBox);
         setButtonSize(saveBtn);
-        setButtonStyle(saveBtn);
         saveButtonBox.getChildren().add(saveBtn);
 
         parentVBoxForPopup.getChildren().add(emptyBoxUpTop);
@@ -286,11 +270,6 @@ public class UsersControlController implements Initializable {
         button.setMaxHeight(buttonYSize);
     }
 
-    private void setButtonStyle(Button button) {
-        String css = Objects.requireNonNull(this.getClass().getResource("buttonStyle.css")).toExternalForm();
-        button.getStylesheets().add(css);
-    }
-
     private void setEmptyBoxSize(HBox hBox) {
         hBox.setMinHeight(buttonYSize);
         hBox.setPrefHeight(buttonYSize);
@@ -319,16 +298,6 @@ public class UsersControlController implements Initializable {
         tableColumn.setMinWidth(width);
         tableColumn.setPrefWidth(width);
         tableColumn.setMaxWidth(width);
-    }
-
-    private void setLblStyle (Label label) {
-        label.setAlignment(Pos.CENTER);
-        label.setStyle(Style.labelBrightGreyStyle);
-    }
-
-    private void setComboBoxTypeStyle (ComboBox<Type> comboBox) {
-        String css = Objects.requireNonNull(this.getClass().getResource("comboboxStyle.css")).toExternalForm();
-        comboBox.getStylesheets().add(css);
     }
 
     private void setUpLabelAndTextOrComboBoxContainers(HBox wholeLineBox, HBox leftBox, HBox rightBox){

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox fx:id="parentHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1223.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dev.frontend.CAP.controller.AdminControlController">
+<HBox fx:id="parentHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1223.0" stylesheets="@adminWindowStyle.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dev.frontend.CAP.controller.AdminControlController">
    <children>
       <VBox fx:id="controlsPanel" alignment="TOP_CENTER" prefHeight="835.0" prefWidth="264.0">
          <children>

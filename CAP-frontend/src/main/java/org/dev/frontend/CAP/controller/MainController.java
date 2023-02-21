@@ -1,7 +1,6 @@
 package org.dev.frontend.CAP.controller;
 
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,7 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dev.api.CAP.enums.Role;
 import org.dev.api.CAP.model.LogInDateDTO;
-import org.dev.frontend.CAP.Style;
 import org.dev.frontend.CAP.Main;
 import org.dev.frontend.CAP.StringConstants;
 import org.dev.frontend.CAP.store.StoreRestUtils;
@@ -24,7 +22,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -57,15 +54,6 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         reset();
-        //parentVbox.setStyle(Style.backgroundGreyStyle);
-        setBackgroundStyle(parentVbox);
-        errorLbl.setStyle(Style.labelWhiteStyle);
-        usernameLbl.setStyle(Style.labelWhiteStyle);
-        passwordLbl.setStyle(Style.labelWhiteStyle);
-        password.setStyle(Style.textFieldStyle);
-        username.setStyle(Style.textFieldStyle);
-        setButtonStyle(logInBtn);
-        setBorderlessButtonStyle(register);
 
         if(storeRestUtils.anyUsersPresent()) {
             try {
@@ -140,20 +128,5 @@ public class MainController implements Initializable {
     private void reset() {
         username.setText("");
         password.setText("");
-    }
-
-    private void setButtonStyle(Button button) {
-        String css = Objects.requireNonNull(this.getClass().getResource("buttonStyle.css")).toExternalForm();
-        button.getStylesheets().add(css);
-    }
-
-    private void setBorderlessButtonStyle(Button button) {
-        String css = Objects.requireNonNull(this.getClass().getResource("borderlessButtonStyle.css")).toExternalForm();
-        button.getStylesheets().add(css);
-    }
-
-    private void setBackgroundStyle (VBox box) {
-        String css = Objects.requireNonNull(this.getClass().getResource("backgroundVboxGreyStyle.css")).toExternalForm();
-        box.getStylesheets().add(css);
     }
 }

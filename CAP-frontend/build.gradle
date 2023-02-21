@@ -27,7 +27,7 @@ group = 'org.dev.frontend'
 mainClassName = "org.dev.frontend.Main"
 
 javafx {
-    version = "14"
+    version = "17"
     modules = [ 'javafx.controls', 'javafx.fxml']
 }
 

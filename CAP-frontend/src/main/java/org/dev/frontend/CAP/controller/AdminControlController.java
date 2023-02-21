@@ -1,17 +1,13 @@
 package org.dev.frontend.CAP.controller;
 
 
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.dev.frontend.CAP.Style;
 import org.dev.frontend.CAP.store.AdminControlStore;
-
-import java.util.Objects;
 
 public class AdminControlController {
 
@@ -24,6 +20,7 @@ public class AdminControlController {
     private final Double buttonYSize = 25.0;
 
     private Double xSize;
+
     private Double ySize;
 
     private Double widthOfWindow;
@@ -55,15 +52,7 @@ public class AdminControlController {
 
     @FXML
     private void initialize() {
-        parentHBox.setStyle(Style.backgroundGreyStyle);
-
-        controlsPanel.setStyle(Style.backgroundGreyStyle);
-        dataPanel.setStyle(Style.backgroundBlackStyle);
         dataPanel.getChildren().clear();
-
-        setButtonStyle(outdatedUsersBtn);
-        setButtonStyle(categoriesRequestBtn);
-        setButtonStyle(infoBtn);
 
         adminControlStore.refreshStore();
         adminControlStore.populateEntries();
@@ -101,9 +90,6 @@ public class AdminControlController {
         listWidth(emptyHBox,boxWithListOfUsers,xSize);
 
         listOfUsers.setVisible(true);
-        listOfUsers.setStyle(Style.textFieldStyle);
-        String css = Objects.requireNonNull(this.getClass().getResource("listViewStyle.css")).toExternalForm();
-        listOfUsers.getStylesheets().add(css);
 
         VBox buttonsBox = new VBox();
         buttonsBox.setAlignment(Pos.TOP_CENTER);
@@ -113,7 +99,6 @@ public class AdminControlController {
 
         Button deleteBtn = new Button();
         deleteBtn.setText("Delete user");
-        setButtonStyle(deleteBtn);
         deleteBtn.setOnAction(e -> deleteBtnAction());
 
 
@@ -182,10 +167,5 @@ public class AdminControlController {
         adminControlStore.populateEntries();
 
         listOfUsers.setItems(adminControlStore.getAllEntries());
-    }
-
-    private void setButtonStyle(Button button) {
-        String css = Objects.requireNonNull(this.getClass().getResource("buttonStyle.css")).toExternalForm();
-        button.getStylesheets().add(css);
     }
 }

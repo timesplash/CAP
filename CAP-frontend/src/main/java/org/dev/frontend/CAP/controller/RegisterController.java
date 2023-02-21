@@ -1,6 +1,5 @@
 package org.dev.frontend.CAP.controller;
 
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -9,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.dev.api.CAP.model.LogInDateDTO;
-import org.dev.frontend.CAP.Style;
 import org.dev.frontend.CAP.store.RegisterStore;
 import org.dev.frontend.CAP.store.StoreRestUtils;
 
@@ -69,18 +67,6 @@ public class RegisterController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         reset();
-        parentVbox.setStyle(Style.backgroundGreyStyle);
-        setButtonStyle(createNewUser);
-        usernameLbl.setStyle(Style.labelWhiteStyle);
-        passwordLbl.setStyle(Style.labelWhiteStyle);
-        questionLbl.setStyle(Style.labelWhiteStyle);
-        answerLbl.setStyle(Style.labelWhiteStyle);
-        roleLbl.setStyle(Style.labelWhiteStyle);
-        saveMessage.setStyle(Style.labelWhiteStyle);
-        username.setStyle(Style.textFieldStyle);
-        password.setStyle(Style.textFieldStyle);
-        question.setStyle(Style.textFieldStyle);
-        answer.setStyle(Style.textFieldStyle);
 
         username.textProperty().bindBidirectional(registerStore.getLogin());
         password.textProperty().bindBidirectional(registerStore.getPassword());
@@ -98,9 +84,6 @@ public class RegisterController implements Initializable {
         role.setItems(registerStore.getRoles());
         role.getSelectionModel().selectFirst();
         registerStore.bindRolesToEnum(role.getSelectionModel().selectedIndexProperty());
-
-        String css = Objects.requireNonNull(this.getClass().getResource("comboboxStyle.css")).toExternalForm();
-        role.getStylesheets().add(css);
     }
 
     @FXML
@@ -128,10 +111,5 @@ public class RegisterController implements Initializable {
         password.setText("");
         question.setText("");
         answer.setText("");
-    }
-
-    private void setButtonStyle(Button button) {
-        String css = Objects.requireNonNull(this.getClass().getResource("buttonStyle.css")).toExternalForm();
-        button.getStylesheets().add(css);
     }
 }
