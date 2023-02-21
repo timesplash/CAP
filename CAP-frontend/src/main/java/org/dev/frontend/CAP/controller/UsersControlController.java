@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -171,6 +172,8 @@ public class UsersControlController implements Initializable {
     }
 
     private void addCategoryBtnAction() {
+        AnchorPane parentAnchorPane = new AnchorPane();
+        parentAnchorPane.getStylesheets().add(getClass().getResource("popUpWindowStyle.css").toExternalForm());
         VBox parentVBoxForPopup = new VBox();
         parentVBoxForPopup.setAlignment(Pos.CENTER);
 
@@ -219,11 +222,12 @@ public class UsersControlController implements Initializable {
         parentVBoxForPopup.getChildren().add(typeBox);
         parentVBoxForPopup.getChildren().add(errorBox);
         parentVBoxForPopup.getChildren().add(saveButtonBox);
+        parentAnchorPane.getChildren().add(parentVBoxForPopup);
 
         Stage popUpWithCategoryStage = new Stage();
         popUpWithCategoryStage.setMinWidth(500);
         popUpWithCategoryStage.setMinHeight(200);
-        popUpWithCategoryStage.setScene(new Scene(parentVBoxForPopup,500,200));
+        popUpWithCategoryStage.setScene(new Scene(parentAnchorPane,500,200));
         popUpWithCategoryStage.show();
         popUpWithCategoryStage.setResizable(false);
     }
