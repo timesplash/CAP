@@ -3,6 +3,7 @@ package org.dev.frontend.CAP.store;
 import lombok.Getter;
 import lombok.Setter;
 import org.dev.api.CAP.enums.Role;
+import org.dev.api.CAP.model.CategoriesDTO;
 import org.dev.api.CAP.model.LogInDateDTO;
 import org.dev.api.CAP.model.UserDTO;
 import org.springframework.http.HttpEntity;
@@ -28,7 +29,9 @@ public class StoreRestUtils {
 
     public static final String GET_LAST_DATE_OF_ENTRY = "http://localhost:8888/api/login_dates";
 
-    public static final String DELETE_INACTIVE_USER = "http://localhost:8888/api/login_dates/{login}";
+    public static final String DELETE_INACTIVE_USER_URL = "http://localhost:8888/api/login_dates/{login}";
+
+    public static final String CATEGORIES_URL = "http://localhost:8888/api/categories";
 
     public static StoreRestUtils getInstance(){
         return storeRestUtils;
@@ -84,6 +87,19 @@ public class StoreRestUtils {
     public void deleteInactiveUser(String login){
         Map<String,String> deletion = new HashMap<>();
         deletion.put("login", login);
-        restTemplate.delete(DELETE_INACTIVE_USER, deletion);
+        restTemplate.delete(DELETE_INACTIVE_USER_URL, deletion);
+    }
+
+    public Optional<List<CategoriesDTO>> getAllCategories() {
+        CategoriesDTO[] categoriesDTOS = restTemplate.getForObject(CATEGORIES_URL, CategoriesDTO[].class);
+        if (categoriesDTOS != null) {
+            return Optional.of(Arrays.asList(categoriesDTOS));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public void saveCategory(CategoriesDTO categoriesDTO) {
+        restTemplate.put(CATEGORIES_URL, categoriesDTO);
     }
 }

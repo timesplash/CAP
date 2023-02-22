@@ -26,8 +26,8 @@ public class AdminControlStore {
 
     public void populateEntries() {
         List<LogInDateDTO> logInDateDTOS = storeRestUtils.getLastLogInDateList().orElseThrow(RuntimeException::new);
-        for (int i = 0; i < logInDateDTOS.size(); i++) {
-            allEntries.add(logInDateDTOS.get(i).getLogin() + "; " + logInDateDTOS.get(i).getDate());
+        for (LogInDateDTO logInDateDTO : logInDateDTOS) {
+            allEntries.add(logInDateDTO.getLogin() + "; " + logInDateDTO.getDate());
         }
     }
 
