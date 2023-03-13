@@ -65,7 +65,8 @@ public class UserRepositoryImpl extends JdbcDaoSupport implements UserRepository
 
     @Override
     public String findNameById(int id) {
-        return getJdbcTemplate().query(FIND_NAME_BY_ID, (rs, rn) -> rs.getString(2)).toString();
+        String username = getJdbcTemplate().queryForObject(FIND_NAME_BY_ID, String.class, id);
+        return username;
     }
 
     private static class UserMapper implements RowMapper<User> {

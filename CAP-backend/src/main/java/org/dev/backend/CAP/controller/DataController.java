@@ -22,7 +22,7 @@ public class DataController {
     }
 
     @PutMapping
-    void save (DataDTO dataDTO) {
+    void save (@RequestBody DataDTO dataDTO) {
         dataService.save(dataDTO);
     }
 

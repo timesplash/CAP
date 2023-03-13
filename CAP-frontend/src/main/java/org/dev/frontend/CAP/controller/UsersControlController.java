@@ -8,13 +8,16 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dev.api.CAP.enums.Type;
+import org.dev.api.CAP.model.CategoriesDTO;
 import org.dev.api.CAP.model.DataDTO;
+import org.dev.frontend.CAP.store.UsersControlStore;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class UsersControlController implements Initializable {
     private final Double buttonBoxYSize = 41.0;
@@ -42,9 +45,12 @@ public class UsersControlController implements Initializable {
     @FXML
     private VBox boxWithContent;
 
+    private final UsersControlStore usersControlStore = UsersControlStore.getStore();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         parentHBox.getChildren().clear();
+        usersControlStore.refreshStore();
 
         setVboxWidth(boxWithButtons,buttonBoxXSize);
 
@@ -71,23 +77,19 @@ public class UsersControlController implements Initializable {
         setEmptyBoxSize(emptyHBoxForStyleOfButtons);
 
         HBox buttonBoxGainsAndLoses = new HBox();
-        setButtonBoxSize(buttonBoxGainsAndLoses);
-        buttonBoxGainsAndLoses.setAlignment(Pos.CENTER);
 
         Button gainsAndLosesBtn = new Button();
-        gainsAndLosesBtn.setText("Gains and spending");
+        gainsAndLosesBtn.setText("Gains and spendings");
         setButtonSize(gainsAndLosesBtn);
-        buttonBoxGainsAndLoses.getChildren().add(gainsAndLosesBtn);
+        setUpButtonBox(buttonBoxGainsAndLoses, gainsAndLosesBtn);
         gainsAndLosesBtn.setOnAction(e -> openGainsAndLosesPanelBtnAcn(boxWithContent));
 
         HBox buttonBoxCreditCalculator = new HBox();
-        setButtonBoxSize(buttonBoxCreditCalculator);
-        buttonBoxCreditCalculator.setAlignment(Pos.CENTER);
 
         Button creditCalculatorBtn = new Button();
         creditCalculatorBtn.setText("Credit calculator");
         setButtonSize(creditCalculatorBtn);
-        buttonBoxCreditCalculator.getChildren().add(creditCalculatorBtn);
+        setUpButtonBox(buttonBoxCreditCalculator,creditCalculatorBtn);
 
         boxWithButtons.getChildren().add(emptyHBoxForStyleOfButtons);
         boxWithButtons.getChildren().add(buttonBoxGainsAndLoses);
@@ -213,23 +215,30 @@ public class UsersControlController implements Initializable {
 
         HBox saveButtonBox = new HBox();
         Button saveBtn = new Button("Save");
+        saveBtn.setOnAction(e -> usersControlStore.saveNewCategory(createNewCategory(categoryTxtField,type)));
         setButtonBoxSize(saveButtonBox);
         setButtonSize(saveBtn);
         saveButtonBox.getChildren().add(saveBtn);
 
-        parentVBoxForPopup.getChildren().add(emptyBoxUpTop);
-        parentVBoxForPopup.getChildren().add(categoryNameBox);
-        parentVBoxForPopup.getChildren().add(typeBox);
-        parentVBoxForPopup.getChildren().add(errorBox);
-        parentVBoxForPopup.getChildren().add(saveButtonBox);
+        List<? extends Pane> popUpNodes = new ArrayList<>(
+                Arrays.asList(emptyBoxUpTop,categoryNameBox,typeBox,errorBox,saveButtonBox)
+        );
+        addListOfNodesToParentNode(parentVBoxForPopup, popUpNodes);
         parentAnchorPane.getChildren().add(parentVBoxForPopup);
 
         Stage popUpWithCategoryStage = new Stage();
-        popUpWithCategoryStage.setMinWidth(500);
-        popUpWithCategoryStage.setMinHeight(200);
-        popUpWithCategoryStage.setScene(new Scene(parentAnchorPane,500,200));
-        popUpWithCategoryStage.show();
-        popUpWithCategoryStage.setResizable(false);
+        setUpPopUpStage(popUpWithCategoryStage, parentAnchorPane, 500.0, 200.0);
+    }
+
+    private CategoriesDTO createNewCategory(TextField categoryTxtField, ComboBox<Type> type){
+        int id = usersControlStore.getIdForNewCategory();
+        CategoriesDTO categoriesDTO = new CategoriesDTO();
+        categoriesDTO.setId(id);
+        categoriesDTO.setName(categoryTxtField.getText());
+        categoriesDTO.setUsername(usersControlStore.getUsername());
+        categoriesDTO.setType(type.getValue());
+        categoriesDTO.setRange(usersControlStore.getRangeForNewCategory());
+        return categoriesDTO;
     }
 
     private void setVboxWidth(VBox vBox, Double width) {
@@ -263,6 +272,12 @@ public class UsersControlController implements Initializable {
         buttonBox.setMinHeight(buttonBoxYSize);
         buttonBox.setPrefHeight(buttonBoxYSize);
         buttonBox.setMaxHeight(buttonBoxYSize);
+    }
+
+    private void setUpButtonBox(HBox buttonBox, Button button){
+        setButtonBoxSize(buttonBox);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.getChildren().add(button);
     }
 
     private void setButtonSize(Button button) {
@@ -317,7 +332,13 @@ public class UsersControlController implements Initializable {
         wholeLineBox.getChildren().add(rightBox);
     }
 
-    private void setUpPanelWithData(VBox boxWithContent, HBox dataPanel, HBox centralBox, VBox buttonsBox, Boolean buttonsBoxPresent) {
+    private void addListOfNodesToParentNode (Pane parentNode, List<? extends Pane> listOfChildrenNodes){
+        for (Pane child: listOfChildrenNodes){
+            parentNode.getChildren().add(child);
+        }
+    }
+
+    private void setUpPanelWithData(VBox boxWithContent, HBox dataPanel, HBox centralBox, VBox buttonsBox, boolean buttonsBoxPresent) {
         HBox emptyLineUpTop = new HBox();
         setEmptyBoxSize(emptyLineUpTop);
 
@@ -332,17 +353,19 @@ public class UsersControlController implements Initializable {
         boxWithContent.heightProperty().addListener(e -> setHBoxHeight(dataPanel,boxWithContent.getHeight() - 2 * buttonYSize));
         boxWithContent.widthProperty().addListener(e -> setHBoxWidth(dataPanel, boxWithContent.getWidth()));
 
-        dataPanel.getChildren().add(emptyBoxForAliment);
-        dataPanel.getChildren().add(centralBox);
-        dataPanel.getChildren().add(buttonsBox);
+        List<? extends Pane> nodesThatSetUpDataPanel = new ArrayList<>(
+                Arrays.asList(emptyBoxForAliment,centralBox,buttonsBox)
+        );
+        addListOfNodesToParentNode(dataPanel, nodesThatSetUpDataPanel);
 
         setCentralBoxWidth(dataPanel,centralBox,buttonsBoxPresent);
 
         dataPanel.widthProperty().addListener(e -> setCentralBoxWidth(dataPanel,centralBox,buttonsBoxPresent));
 
-        boxWithContent.getChildren().add(emptyLineUpTop);
-        boxWithContent.getChildren().add(dataPanel);
-        boxWithContent.getChildren().add(emptyLineBottom);
+        List<? extends Pane> nodesThatSetStyleToBoxWithContent = new LinkedList<>(
+                Arrays.asList(emptyLineUpTop,dataPanel,emptyLineBottom)
+        );
+        addListOfNodesToParentNode(boxWithContent, nodesThatSetStyleToBoxWithContent);
     }
 
     private void setCentralBoxWidth (HBox dataPanel, HBox centralBox, Boolean buttonsBoxPresent) {
@@ -351,5 +374,13 @@ public class UsersControlController implements Initializable {
         } else {
             setHBoxWidth(centralBox, dataPanel.getWidth() - (buttonBoxXSize - buttonXSize) / 2.0);
         }
+    }
+
+    private void setUpPopUpStage(Stage popUpStage, AnchorPane anchorPane, Double widthOfWindow, Double heightOfWindow){
+        popUpStage.setMinWidth(widthOfWindow);
+        popUpStage.setMinHeight(heightOfWindow);
+        popUpStage.setScene(new Scene(anchorPane,widthOfWindow,heightOfWindow));
+        popUpStage.show();
+        popUpStage.setResizable(false);
     }
 }

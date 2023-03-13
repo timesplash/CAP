@@ -38,7 +38,8 @@ public class UserController {
 
     @GetMapping(value = "/{login}")
     public ResponseEntity<User> findByLogin(@PathVariable("login") String login) throws Exception {
-        return new ResponseEntity<>(userService.findByLogin(login), HttpStatus.OK);
+        User user = userService.findByLogin(login);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping

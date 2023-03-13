@@ -25,6 +25,7 @@ public class UsersControlStore {
     }
 
     public void populateAllCategories() {
+        categoriesList.clear();
         List<CategoriesDTO> categoriesDTOS = storeRestUtils.getAllCategories().orElseThrow(RuntimeException::new);
         for (CategoriesDTO categoriesDTO: categoriesDTOS) {
             if (storeRestUtils.getCurrentUser().getRole() == Role.PERSONAL) {
@@ -35,6 +36,29 @@ public class UsersControlStore {
                     categoriesList.add(categoriesDTO.getName());
                 }
             }
+        }
+    }
+
+    public int getIdForNewCategory() {
+        List<CategoriesDTO> categoriesDTOS = storeRestUtils.getAllCategories().orElseThrow(RuntimeException::new);
+        int newId;
+        if (categoriesDTOS == null){
+            newId = 0;
+        } else {
+            newId = categoriesDTOS.size();
+        }
+        return newId;
+    }
+
+    public String getUsername() {
+        return storeRestUtils.getCurrentUser().getUserName();
+    }
+
+    public Range getRangeForNewCategory() {
+        if (storeRestUtils.getCurrentUser().getRole().equals(Role.PERSONAL)){
+            return Range.PRIVATE_PERSONAL;
+        } else {
+            return Range.PRIVATE_CORP;
         }
     }
 

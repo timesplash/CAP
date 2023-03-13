@@ -61,6 +61,7 @@ public class StoreRestUtils {
             ResponseEntity<UserDTO> userDTOResponseEntity = restTemplate.exchange(GET_USER_BY_LOGIN_REQUEST_URL + this.username,
                     HttpMethod.GET, new HttpEntity<>(restTemplate.getInterceptors()), UserDTO.class);
             currentUser = userDTOResponseEntity.getBody();
+            currentUser.setUserName(username);
             return currentUser.getRole();
         } catch (HttpClientErrorException e) {
             throw new AccessDeniedException("");
