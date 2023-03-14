@@ -148,6 +148,7 @@ public class UsersControlController implements Initializable {
         Button addButton = new Button("add");
         setButtonSize(addButton);
         addButton.setAlignment(Pos.CENTER);
+        addButton.setOnAction(e -> addGainsOrLosesBtnAction());
 
         boxWithAddButton.getChildren().add(addButton);
         boxWithAddButton.setAlignment(Pos.CENTER);
@@ -174,60 +175,87 @@ public class UsersControlController implements Initializable {
     }
 
     private void addCategoryBtnAction() {
+        HBox categoryNameBox = new HBox();
+
+        Label categoryNameLbl = new Label("Category name: ");
+
+        TextField categoryTxtField = new TextField();
+        initialTextFieldSetUpForPopUp(categoryTxtField);
+
+        setUpLabelAndControls(categoryNameBox,categoryNameLbl,categoryTxtField);
+
+        HBox typeBox = new HBox();
+
+        Label typeLbl = new Label("Type: ");
+        ComboBox<Type> type = new ComboBox<>();
+        type.getItems().addAll(Type.values());
+
+        setUpLabelAndControls(typeBox,typeLbl,type);
+
+        HBox errorBox = new HBox();
+        setHBoxHeight(errorBox, buttonBoxYSize);
+
+        Button saveBtn = new Button("Save");
+        saveBtn.setOnAction(e -> usersControlStore.saveNewCategory(createNewCategory(categoryTxtField,type)));
+
+        List<? extends Pane> popUpNodes = new ArrayList<>(
+                Arrays.asList(categoryNameBox,typeBox,errorBox)
+        );
+        generalPopupSetup(popUpNodes,saveBtn);
+    }
+
+    private void addGainsOrLosesBtnAction() {
+        HBox amountBox = new HBox();
+
+        Label amountLbl = new Label("Amount: ");
+        TextField amountTxt = new TextField();
+        initialTextFieldSetUpForPopUp(amountTxt);
+
+        setUpLabelAndControls(amountBox,amountLbl,amountTxt);
+
+        HBox categoryBox = new HBox();
+
+        Label categoryLbl = new Label("Category: ");
+        ComboBox<String> categoryComboBox = new ComboBox<>();
+        usersControlStore.populateAllCategories();
+        categoryComboBox.setItems(usersControlStore.getCategoriesList());
+
+        setUpLabelAndControls(categoryBox,categoryLbl,categoryComboBox);
+
+        HBox errorBox = new HBox();
+        setHBoxHeight(errorBox, buttonBoxYSize);
+
+        Button saveBtn = new Button("Save");
+        saveBtn.setOnAction(e -> usersControlStore.saveNewGainsOrLoses(createNewData(categoryComboBox,amountTxt)));
+
+        List<? extends Pane> popUpNodes = new ArrayList<>(
+                Arrays.asList(amountBox,categoryBox,errorBox)
+        );
+        generalPopupSetup(popUpNodes,saveBtn);
+    }
+
+    private void generalPopupSetup(List<? extends Pane> popUpNodes, Button saveBtn) {
         AnchorPane parentAnchorPane = new AnchorPane();
         parentAnchorPane.getStylesheets().add(getClass().getResource("popUpWindowStyle.css").toExternalForm());
+
         VBox parentVBoxForPopup = new VBox();
         parentVBoxForPopup.setAlignment(Pos.CENTER);
 
         HBox emptyBoxUpTop = new HBox();
         setEmptyBoxSize(emptyBoxUpTop);
 
-        HBox categoryNameBox = new HBox();
-        HBox categoryNameLblBox = new HBox();
-        HBox categoryNameTxtBox = new HBox();
-
-        Label categoryNameLbl = new Label("Category name: ");
-
-        TextField categoryTxtField = new TextField();
-        categoryTxtField.setText("");
-        categoryTxtField.setMinWidth(300);
-
-        setUpLabelAndTextOrComboBoxContainers(categoryNameBox,categoryNameLblBox,categoryNameTxtBox);
-
-        categoryNameLblBox.getChildren().add(categoryNameLbl);
-        categoryNameTxtBox.getChildren().add(categoryTxtField);
-
-        HBox typeBox = new HBox();
-        HBox typeLblBox = new HBox();
-        HBox typeComboBoxContainer = new HBox();
-
-        setUpLabelAndTextOrComboBoxContainers(typeBox,typeLblBox,typeComboBoxContainer);
-
-        Label typeLbl = new Label("Type: ");
-        ComboBox<Type> type = new ComboBox<>();
-        type.getItems().addAll(Type.values());
-
-        typeLblBox.getChildren().add(typeLbl);
-        typeComboBoxContainer.getChildren().add(type);
-
-        HBox errorBox = new HBox();
-        setHBoxHeight(errorBox, buttonBoxYSize);
-
         HBox saveButtonBox = new HBox();
-        Button saveBtn = new Button("Save");
-        saveBtn.setOnAction(e -> usersControlStore.saveNewCategory(createNewCategory(categoryTxtField,type)));
         setButtonBoxSize(saveButtonBox);
         setButtonSize(saveBtn);
         saveButtonBox.getChildren().add(saveBtn);
 
-        List<? extends Pane> popUpNodes = new ArrayList<>(
-                Arrays.asList(emptyBoxUpTop,categoryNameBox,typeBox,errorBox,saveButtonBox)
-        );
+        parentVBoxForPopup.getChildren().add(emptyBoxUpTop);
         addListOfNodesToParentNode(parentVBoxForPopup, popUpNodes);
+        parentVBoxForPopup.getChildren().add(saveButtonBox);
         parentAnchorPane.getChildren().add(parentVBoxForPopup);
 
-        Stage popUpWithCategoryStage = new Stage();
-        setUpPopUpStage(popUpWithCategoryStage, parentAnchorPane, 500.0, 200.0);
+        Stage popUpStage = new Stage();
+        setUpPopUpStage(popUpStage, parentAnchorPane, 500.0, 200.0);
     }
 
     private CategoriesDTO createNewCategory(TextField categoryTxtField, ComboBox<Type> type){
@@ -239,6 +267,13 @@ public class UsersControlController implements Initializable {
         categoriesDTO.setType(type.getValue());
         categoriesDTO.setRange(usersControlStore.getRangeForNewCategory());
         return categoriesDTO;
+    }
+
+    private DataDTO createNewData(ComboBox<String> categoryName, TextField amount) {
+        DataDTO dataDTO = new DataDTO();
+        dataDTO.setCategoryName(categoryName.getValue());
+        dataDTO.setAmount(Double.valueOf(amount.getText()));
+        return dataDTO;
     }
 
     private void setVboxWidth(VBox vBox, Double width) {
@@ -319,7 +354,10 @@ public class UsersControlController implements Initializable {
         tableColumn.setMaxWidth(width);
     }
 
-    private void setUpLabelAndTextOrComboBoxContainers(HBox wholeLineBox, HBox leftBox, HBox rightBox){
+    private void setUpLabelAndControls(HBox wholeLineBox, Label label, Control controlNode){
+        HBox leftBox = new HBox();
+        HBox rightBox = new HBox();
+
         setHBoxWidth(leftBox,150.0);
         setHBoxHeight(leftBox, buttonBoxYSize);
         leftBox.setAlignment(Pos.CENTER_RIGHT);
@@ -330,12 +368,20 @@ public class UsersControlController implements Initializable {
 
         wholeLineBox.getChildren().add(leftBox);
         wholeLineBox.getChildren().add(rightBox);
+
+        leftBox.getChildren().add(label);
+        rightBox.getChildren().add(controlNode);
     }
 
     private void addListOfNodesToParentNode (Pane parentNode, List<? extends Pane> listOfChildrenNodes){
         for (Pane child: listOfChildrenNodes){
             parentNode.getChildren().add(child);
         }
+    }
+
+    private void initialTextFieldSetUpForPopUp (TextField textField) {
+        textField.setText("");
+        textField.setMinWidth(300);
     }
 
     private void setUpPanelWithData(VBox boxWithContent, HBox dataPanel, HBox centralBox, VBox buttonsBox, boolean buttonsBoxPresent) {

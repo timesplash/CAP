@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.dev.api.CAP.enums.Role;
 import org.dev.api.CAP.model.CategoriesDTO;
+import org.dev.api.CAP.model.DataDTO;
 import org.dev.api.CAP.model.LogInDateDTO;
 import org.dev.api.CAP.model.UserDTO;
 import org.springframework.http.HttpEntity;
@@ -32,6 +33,8 @@ public class StoreRestUtils {
     public static final String DELETE_INACTIVE_USER_URL = "http://localhost:8888/api/login_dates/{login}";
 
     public static final String CATEGORIES_URL = "http://localhost:8888/api/categories";
+
+    public static final String DATA_URL = "http://localhost:8888/api/data";
 
     public static StoreRestUtils getInstance(){
         return storeRestUtils;
@@ -102,5 +105,9 @@ public class StoreRestUtils {
 
     public void saveCategory(CategoriesDTO categoriesDTO) {
         restTemplate.put(CATEGORIES_URL, categoriesDTO);
+    }
+
+    public void saveData(DataDTO dataDTO) {
+        restTemplate.put(DATA_URL, dataDTO);
     }
 }

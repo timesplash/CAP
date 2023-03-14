@@ -6,7 +6,9 @@ import lombok.Getter;
 import org.dev.api.CAP.enums.Range;
 import org.dev.api.CAP.enums.Role;
 import org.dev.api.CAP.model.CategoriesDTO;
+import org.dev.api.CAP.model.DataDTO;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -64,6 +66,14 @@ public class UsersControlStore {
 
     public String saveNewCategory(CategoriesDTO categoriesDTO) {
         storeRestUtils.saveCategory(categoriesDTO);
+        return "";
+    }
+
+    public String saveNewGainsOrLoses(DataDTO dataDTO) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        dataDTO.setDate(localDateTime);
+        dataDTO.setUsername(storeRestUtils.getCurrentUser().getUserName());
+        storeRestUtils.saveData(dataDTO);
         return "";
     }
 }
