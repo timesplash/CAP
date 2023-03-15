@@ -61,23 +61,40 @@
     -fx-text-fill: #b5b5b5;
 }
 
-.table-view .column-header {
+table-view .filler {
     -fx-background-color: #303030;
+}
+
+.table-view .column-header {
+    -fx-background-color: linear-gradient(to bottom, #3c3c3c, #303030);
+    -fx-text-fill: #b5b5b5;
+}
+
+.table-view .column-header-background
+{
+    -fx-background-color: #303030;
+}
+
+.table-view .table-cell {
+    -fx-border-color: transparent;
     -fx-text-fill: #b5b5b5;
 }
 
 .table-row-cell:even{
     -fx-background-color: #3c3c3c;
+    -fx-background-insets: 0, 0 0 1 0;
     -fx-text-fill: #b5b5b5;
 }
 
 .table-row-cell:odd{
     -fx-background-color: #464646;
+    -fx-background-insets: 0, 0 0 1 0;
     -fx-text-fill: #b5b5b5;
 }
 
 .table-row-cell:filled:hover {
     -fx-background-color: #505050;
+    -fx-background-insets: 0, 0 0 1 0;
     -fx-text-fill: #b5b5b5;
 }
 
@@ -88,10 +105,15 @@
 .table-view .virtual-flow .scroll-bar:horizontal .track,
 .table-view .virtual-flow .scroll-bar:horizontal .track-background {
     -fx-background-color: transparent;
+    -fx-fill: #505050;
 }
 
 .table-view .virtual-flow .scroll-bar:vertical .thumb{
-    -fx-background-color: #303030;
+    -fx-background-color: #505050;
+}
+
+.table-view .virtual-flow .scroll-bar:horizontal .thumb{
+    -fx-background-color: #505050;
 }
 
 .table-view .column-header .label{

@@ -64,6 +64,7 @@ public class StoreRestUtils {
             ResponseEntity<UserDTO> userDTOResponseEntity = restTemplate.exchange(GET_USER_BY_LOGIN_REQUEST_URL + this.username,
                     HttpMethod.GET, new HttpEntity<>(restTemplate.getInterceptors()), UserDTO.class);
             currentUser = userDTOResponseEntity.getBody();
+            assert currentUser != null;
             currentUser.setUserName(username);
             return currentUser.getRole();
         } catch (HttpClientErrorException e) {
@@ -109,5 +110,14 @@ public class StoreRestUtils {
 
     public void saveData(DataDTO dataDTO) {
         restTemplate.put(DATA_URL, dataDTO);
+    }
+
+    public Optional<List<DataDTO>> getData(String username) {
+        DataDTO[] dataDTOS = restTemplate.postForObject(DATA_URL, username, DataDTO[].class);
+        if (dataDTOS != null) {
+            return Optional.of(Arrays.asList(dataDTOS));
+        } else {
+            return Optional.empty();
+        }
     }
 }

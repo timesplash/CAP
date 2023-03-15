@@ -35,7 +35,11 @@ public class UserRepositoryImpl extends JdbcDaoSupport implements UserRepository
     //language=SQL
     private static final String FIND_NAME_BY_ID = "SELECT login FROM users WHERE id = ?";
 
-    public UserRepositoryImpl(DataSource dataSource){setDataSource(dataSource);}
+    private final DataRepository dataRepository;
+
+    public UserRepositoryImpl(DataSource dataSource, DataRepository dataRepository){
+        this.dataRepository = dataRepository;
+        setDataSource(dataSource);}
 
     @Override
     public void save(User user) {
@@ -50,6 +54,7 @@ public class UserRepositoryImpl extends JdbcDaoSupport implements UserRepository
     @Override
     public void delete(String login) {
         getJdbcTemplate().update(DELETE_USER_REQUEST, login);
+        dataRepository.deleteWithUser(login);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package org.dev.frontend.CAP.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -28,6 +30,8 @@ public class UsersControlController implements Initializable {
 
     private final Double buttonYSize = 25.0;
 
+    private final ObservableList<DataDTO> gainsAndLosses = FXCollections.observableArrayList();
+
     private Double xSize;
 
     private Double ySize;
@@ -44,6 +48,12 @@ public class UsersControlController implements Initializable {
 
     @FXML
     private VBox boxWithContent;
+
+    private final TableView<DataDTO> tableWithData = new TableView<>();
+
+    private final TableColumn<DataDTO, String> columnWithCategory = new TableColumn<>("Category");
+
+    private final TableColumn<DataDTO, Double> columnWithValue = new TableColumn<>("Amount");
 
     private final UsersControlStore usersControlStore = UsersControlStore.getStore();
 
@@ -79,7 +89,7 @@ public class UsersControlController implements Initializable {
         HBox buttonBoxGainsAndLoses = new HBox();
 
         Button gainsAndLosesBtn = new Button();
-        gainsAndLosesBtn.setText("Gains and spendings");
+        gainsAndLosesBtn.setText("Gains and expenses");
         setButtonSize(gainsAndLosesBtn);
         setUpButtonBox(buttonBoxGainsAndLoses, gainsAndLosesBtn);
         gainsAndLosesBtn.setOnAction(e -> openGainsAndLosesPanelBtnAcn(boxWithContent));
@@ -118,15 +128,7 @@ public class UsersControlController implements Initializable {
 
         HBox dataPanel = new HBox();
 
-        TableView<DataDTO> tableWithData = new TableView<>();
-        TableColumn<DataDTO, String> columnWithCategory = new TableColumn<>("Category");
-        columnWithCategory.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
-
-        TableColumn<DataDTO, Double> columnWithValue = new TableColumn<>("Amount");
-        columnWithValue.setCellValueFactory(new  PropertyValueFactory<>("amount"));
-
-        tableWithData.getColumns().add(columnWithCategory);
-        tableWithData.getColumns().add(columnWithValue);
+        setTableWithData();
 
         VBox boxForButtons = new VBox();
         setVboxWidth(boxForButtons,buttonBoxXSize);
@@ -172,6 +174,26 @@ public class UsersControlController implements Initializable {
                 tableWithData.getWidth() - buttonXSize * 3 / 4));
 
         setUpPanelWithData(boxWithContent,dataPanel,boxForTable,boxForButtons,true);
+    }
+
+    private void setTableWithData() {
+        columnWithCategory.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
+        columnWithValue.setCellValueFactory(new  PropertyValueFactory<>("amount"));
+
+        tableWithData.getColumns().add(columnWithCategory);
+        tableWithData.getColumns().add(columnWithValue);
+
+        tableWithData.setItems(gainsAndLosses);
+        fillTableWithData();
+    }
+
+    private void fillTableWithData() {
+        Optional<List<DataDTO>> optional = usersControlStore.getDataValues();
+        gainsAndLosses.clear();
+        if (optional.isPresent()) {
+            List<DataDTO> dataDTOS = optional.get();
+            gainsAndLosses.addAll(dataDTOS);
+        }
     }
 
     private void addCategoryBtnAction() {
@@ -226,7 +248,10 @@ public class UsersControlController implements Initializable {
         setHBoxHeight(errorBox, buttonBoxYSize);
 
         Button saveBtn = new Button("Save");
-        saveBtn.setOnAction(e -> usersControlStore.saveNewGainsOrLoses(createNewData(categoryComboBox,amountTxt)));
+        saveBtn.setOnAction(e -> {
+            usersControlStore.saveNewGainsOrLoses(createNewData(categoryComboBox,amountTxt));
+            fillTableWithData();
+        });
 
         List<? extends Pane> popUpNodes = new ArrayList<>(
                 Arrays.asList(amountBox,categoryBox,errorBox)
@@ -236,7 +261,7 @@ public class UsersControlController implements Initializable {
 
     private void generalPopupSetup(List<? extends Pane> popUpNodes, Button saveBtn) {
         AnchorPane parentAnchorPane = new AnchorPane();
-        parentAnchorPane.getStylesheets().add(getClass().getResource("popUpWindowStyle.css").toExternalForm());
+        parentAnchorPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("popUpWindowStyle.css")).toExternalForm());
 
         VBox parentVBoxForPopup = new VBox();
         parentVBoxForPopup.setAlignment(Pos.CENTER);
@@ -343,9 +368,9 @@ public class UsersControlController implements Initializable {
     }
 
     private void setStingColumnWidth(TableColumn<DataDTO, String> tableColumn, Double width) {
-        tableColumn.setMinWidth(width);
-        tableColumn.setPrefWidth(width);
-        tableColumn.setMaxWidth(width);
+        tableColumn.setMinWidth(width-2);
+        tableColumn.setPrefWidth(width-2);
+        tableColumn.setMaxWidth(width-2);
     }
 
     private void setDoubleColumnWidth(TableColumn<DataDTO, Double> tableColumn, Double width) {
@@ -428,5 +453,6 @@ public class UsersControlController implements Initializable {
         popUpStage.setScene(new Scene(anchorPane,widthOfWindow,heightOfWindow));
         popUpStage.show();
         popUpStage.setResizable(false);
+        popUpStage.setOnCloseRequest(e -> fillTableWithData());
     }
 }

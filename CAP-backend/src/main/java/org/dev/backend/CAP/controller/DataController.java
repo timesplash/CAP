@@ -26,8 +26,8 @@ public class DataController {
         dataService.save(dataDTO);
     }
 
-    @GetMapping
-    public ResponseEntity<List<DataDTO>> getData(String username) {
+    @PostMapping
+    public ResponseEntity<List<DataDTO>> getData(@RequestBody String username) {
         return new ResponseEntity<>(dataService.getData(username), HttpStatus.OK);
     }
 }

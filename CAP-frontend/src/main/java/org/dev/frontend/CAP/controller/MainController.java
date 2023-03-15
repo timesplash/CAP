@@ -57,16 +57,7 @@ public class MainController implements Initializable {
         try {
             if(storeRestUtils.login(username.getText() , password.getText()) == Role.ADMIN){
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("adminControlWindow.fxml"));
-                Parent root = loader.load();
-                Scene scene = new Scene(root);
-                Stage primaryStage = new Stage();
-                primaryStage.setTitle(StringConstants.programName);
-                primaryStage.setScene(scene);
-                primaryStage.show();
-                primaryStage.setMinWidth(800);
-                primaryStage.setMinHeight(600);
-                primaryStage.setResizable(true);
-                errorLbl.setText("");
+                stageSetup(loader);
             } else if (storeRestUtils.login(username.getText() , password.getText()) == Role.CORPORATE ||
                     storeRestUtils.login(username.getText() , password.getText()) == Role.PERSONAL) {
                 LogInDateDTO logInDateDTO = new LogInDateDTO();
@@ -75,16 +66,7 @@ public class MainController implements Initializable {
                 logInDateDTO.setDate(time);
                 storeRestUtils.saveNewEntryDate(logInDateDTO);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("userControlWindow.fxml"));
-                Parent root = loader.load();
-                Scene scene = new Scene(root);
-                Stage primaryStage = new Stage();
-                primaryStage.setTitle(StringConstants.programName);
-                primaryStage.setScene(scene);
-                primaryStage.show();
-                primaryStage.setMinWidth(800);
-                primaryStage.setMinHeight(600);
-                primaryStage.setResizable(true);
-                errorLbl.setText("");
+                stageSetup(loader);
             } else {
                 errorLbl.setText("Non matching login & password");
             }
@@ -93,6 +75,19 @@ public class MainController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void stageSetup(FXMLLoader loader) throws IOException {
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        Stage primaryStage = new Stage();
+        primaryStage.setTitle(StringConstants.programName);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(600);
+        primaryStage.setResizable(true);
+        errorLbl.setText("");
     }
 
     @FXML

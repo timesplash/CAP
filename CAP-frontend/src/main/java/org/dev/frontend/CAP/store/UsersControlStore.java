@@ -10,6 +10,7 @@ import org.dev.api.CAP.model.DataDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 public class UsersControlStore {
@@ -75,5 +76,9 @@ public class UsersControlStore {
         dataDTO.setUsername(storeRestUtils.getCurrentUser().getUserName());
         storeRestUtils.saveData(dataDTO);
         return "";
+    }
+
+    public Optional<List<DataDTO>> getDataValues() {
+        return storeRestUtils.getData(storeRestUtils.getCurrentUser().getUserName());
     }
 }
