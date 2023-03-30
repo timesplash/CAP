@@ -119,3 +119,30 @@ table-view .filler {
 .table-view .column-header .label{
     -fx-text-fill: #b5b5b5;
 }
+
+.combo-box
+{
+    -fx-background-radius: 6;
+    -fx-background-color: #797979, #393939;
+    -fx-text-fill: #b5b5b5
+}
+
+.combo-box .list-cell
+{
+    -fx-background-color: #797979, #393939;
+    -fx-text-fill: #b5b5b5;
+
+}
+
+.combo-box-popup .list-view
+{
+    -fx-background-color: #717171, #393939;
+
+}
+
+.combo-box-popup .list-view .list-cell
+{
+    -fx-padding: 4 0 4 5;
+    -fx-background-color: #393939;
+    -fx-text-fill: #b5b5b5;
+}

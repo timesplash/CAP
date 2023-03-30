@@ -25,4 +25,8 @@ public class CategoriesService {
         log.info("Finding categories...");
         return categoriesRepository.getCategories();
     }
+
+    public CategoriesDTO getCategoryByName(String categoryName) {
+        return categoriesRepository.getCategory(categoryName);
+    }
 }

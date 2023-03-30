@@ -3,10 +3,8 @@ package org.dev.frontend.CAP.store;
 import lombok.Getter;
 import lombok.Setter;
 import org.dev.api.CAP.enums.Role;
-import org.dev.api.CAP.model.CategoriesDTO;
-import org.dev.api.CAP.model.DataDTO;
-import org.dev.api.CAP.model.LogInDateDTO;
-import org.dev.api.CAP.model.UserDTO;
+import org.dev.api.CAP.model.*;
+import org.dev.frontend.CAP.model.Data;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +34,9 @@ public class StoreRestUtils {
 
     public static final String DATA_URL = "http://localhost:8888/api/data";
 
-    public static StoreRestUtils getInstance(){
+    public static final String SUMMARY_URL = "http://localhost:8888/api/data/summary";
+
+    public static StoreRestUtils getInstance() {
         return storeRestUtils;
     }
 
@@ -112,12 +112,16 @@ public class StoreRestUtils {
         restTemplate.put(DATA_URL, dataDTO);
     }
 
-    public Optional<List<DataDTO>> getData(String username) {
-        DataDTO[] dataDTOS = restTemplate.postForObject(DATA_URL, username, DataDTO[].class);
+    public Optional<List<Data>> getData(String username) {
+        Data[] dataDTOS = restTemplate.postForObject(DATA_URL, username, Data[].class);
         if (dataDTOS != null) {
             return Optional.of(Arrays.asList(dataDTOS));
         } else {
             return Optional.empty();
         }
+    }
+
+    public SummaryDTO getSummary(RangeDTO rangeDTO) {
+        return restTemplate.postForObject(SUMMARY_URL, rangeDTO, SummaryDTO.class);
     }
 }

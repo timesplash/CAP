@@ -87,6 +87,7 @@ public class MainController implements Initializable {
         primaryStage.setMinWidth(800);
         primaryStage.setMinHeight(600);
         primaryStage.setResizable(true);
+        primaryStage.setMaximized(true);
         errorLbl.setText("");
     }
 

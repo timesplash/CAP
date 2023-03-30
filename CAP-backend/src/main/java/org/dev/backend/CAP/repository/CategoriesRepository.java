@@ -10,4 +10,6 @@ public interface CategoriesRepository {
     List<CategoriesDTO> getCategories();
 
     void delete (String username);
+
+    CategoriesDTO getCategory(String categoryName);
 }

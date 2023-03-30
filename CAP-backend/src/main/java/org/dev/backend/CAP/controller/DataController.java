@@ -2,6 +2,8 @@ package org.dev.backend.CAP.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.dev.api.CAP.model.DataDTO;
+import org.dev.api.CAP.model.RangeDTO;
+import org.dev.api.CAP.model.SummaryDTO;
 import org.dev.backend.CAP.service.DataService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,5 +31,10 @@ public class DataController {
     @PostMapping
     public ResponseEntity<List<DataDTO>> getData(@RequestBody String username) {
         return new ResponseEntity<>(dataService.getData(username), HttpStatus.OK);
+    }
+
+    @PostMapping("/summary")
+    public ResponseEntity<SummaryDTO> getSummary(@RequestBody RangeDTO rangeDTO) {
+        return new ResponseEntity<>(dataService.getSummary(rangeDTO), HttpStatus.OK);
     }
 }

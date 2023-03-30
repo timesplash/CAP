@@ -29,6 +29,9 @@ public class CategoriesRepositoryImpl extends JdbcDaoSupport implements Categori
     private static final String DELETE_CATEGORIES_OF_USER = "DELETE FROM categories USING users " +
             "AS us JOIN categories c on us.id = c.user_id WHERE us.login = ?";
 
+    //language=SQL
+    private static final String GET_CATEGORY_BY_NAME = "SELECT * FROM categories WHERE name = ?";
+
     private final UserRepository userRepository;
 
     public CategoriesRepositoryImpl(DataSource dataSource, UserRepository userRepository) {
@@ -60,6 +63,12 @@ public class CategoriesRepositoryImpl extends JdbcDaoSupport implements Categori
     @Override
     public void delete(String username) {
         getJdbcTemplate().update(DELETE_CATEGORIES_OF_USER,username);
+    }
+
+    @Override
+    public CategoriesDTO getCategory(String categoryName) {
+        CategoriesDTO categoriesDTO = getJdbcTemplate().query(GET_CATEGORY_BY_NAME, new CategoriesMapper(), categoryName).stream().findFirst().get();
+        return categoriesDTO;
     }
 
     private static class CategoriesMapper implements RowMapper<CategoriesDTO> {

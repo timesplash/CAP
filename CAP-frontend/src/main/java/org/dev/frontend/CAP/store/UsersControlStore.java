@@ -7,6 +7,9 @@ import org.dev.api.CAP.enums.Range;
 import org.dev.api.CAP.enums.Role;
 import org.dev.api.CAP.model.CategoriesDTO;
 import org.dev.api.CAP.model.DataDTO;
+import org.dev.api.CAP.model.RangeDTO;
+import org.dev.api.CAP.model.SummaryDTO;
+import org.dev.frontend.CAP.model.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +25,13 @@ public class UsersControlStore {
 
     @Getter
     private final ObservableList<String> categoriesList = FXCollections.observableArrayList();
+
+    @Getter
+    private final ObservableList<Integer> years = FXCollections.observableArrayList();
+
+    @Getter
+    private final ObservableList<String> months = FXCollections.observableArrayList("January", "February", "March",
+            "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
     public void refreshStore(){
         categoriesList.clear();
@@ -70,6 +80,14 @@ public class UsersControlStore {
         return "";
     }
 
+    public void populateYearList() {
+        years.clear();
+        LocalDateTime currentDate = LocalDateTime.now();
+        for (int year = currentDate.getYear(); year > 1950; year--) {
+            years.add(year);
+        }
+    }
+
     public String saveNewGainsOrLoses(DataDTO dataDTO) {
         LocalDateTime localDateTime = LocalDateTime.now();
         dataDTO.setDate(localDateTime);
@@ -78,7 +96,11 @@ public class UsersControlStore {
         return "";
     }
 
-    public Optional<List<DataDTO>> getDataValues() {
+    public SummaryDTO getSummaryValues(RangeDTO rangeDTO) {
+        return storeRestUtils.getSummary(rangeDTO);
+    }
+
+    public Optional<List<Data>> getDataValues() {
         return storeRestUtils.getData(storeRestUtils.getCurrentUser().getUserName());
     }
 }

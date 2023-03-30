@@ -16,9 +16,13 @@ import javafx.stage.Stage;
 import org.dev.api.CAP.enums.Type;
 import org.dev.api.CAP.model.CategoriesDTO;
 import org.dev.api.CAP.model.DataDTO;
+import org.dev.api.CAP.model.RangeDTO;
+import org.dev.api.CAP.model.SummaryDTO;
+import org.dev.frontend.CAP.model.Data;
 import org.dev.frontend.CAP.store.UsersControlStore;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class UsersControlController implements Initializable {
@@ -30,7 +34,7 @@ public class UsersControlController implements Initializable {
 
     private final Double buttonYSize = 25.0;
 
-    private final ObservableList<DataDTO> gainsAndLosses = FXCollections.observableArrayList();
+    private final ObservableList<Data> gainsAndLosses = FXCollections.observableArrayList();
 
     private Double xSize;
 
@@ -49,11 +53,13 @@ public class UsersControlController implements Initializable {
     @FXML
     private VBox boxWithContent;
 
-    private final TableView<DataDTO> tableWithData = new TableView<>();
+    private final TableView<Data> tableWithData = new TableView<>();
 
-    private final TableColumn<DataDTO, String> columnWithCategory = new TableColumn<>("Category");
+    private final TableColumn<Data, String> columnWithCategory = new TableColumn<>("Category");
 
-    private final TableColumn<DataDTO, Double> columnWithValue = new TableColumn<>("Amount");
+    private final TableColumn<Data, Double> columnWithValue = new TableColumn<>("Amount");
+
+    private final TableColumn<Data, LocalDateTime> columnWithDate = new TableColumn<>("Date");
 
     private final UsersControlStore usersControlStore = UsersControlStore.getStore();
 
@@ -158,29 +164,126 @@ public class UsersControlController implements Initializable {
         boxForButtons.getChildren().add(boxWithAddCategoryButton);
         boxForButtons.getChildren().add(boxWithAddButton);
 
+        VBox centralVBox = new VBox();
+
+        HBox boxWithOverAll = new HBox();
+        setOverAllBox(boxWithOverAll);
+
         HBox boxForTable = new HBox();
         boxForTable.getChildren().add(tableWithData);
+        centralVBox.getChildren().add(boxWithOverAll);
+        centralVBox.getChildren().add(boxForTable);
+
+        setBoxHeight(boxForTable, centralVBox.getHeight()-2*buttonBoxYSize);
+        centralVBox.heightProperty().addListener(e -> setBoxHeight(boxForTable, centralVBox.getHeight()-2*buttonBoxYSize));
 
         setTableWidth(tableWithData, dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
         setDoubleColumnWidth(columnWithValue, buttonXSize * 3 / 4);
-        setStingColumnWidth(columnWithCategory, tableWithData.getWidth() - buttonXSize * 3 / 4);
+        setDateColumnWidth(columnWithDate, buttonXSize * 1 / 2);
+        setStringColumnWidth(columnWithCategory, tableWithData.getWidth() - buttonXSize * 5 / 4);
 
         dataPanel.widthProperty().addListener(e -> {
             setTableWidth(tableWithData, dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
-            setStingColumnWidth(columnWithCategory, tableWithData.getWidth() - buttonXSize * 3 / 4);
+            setStringColumnWidth(columnWithCategory, tableWithData.getWidth() - buttonXSize * 5 / 4);
         });
 
-        tableWithData.widthProperty().addListener(e -> setStingColumnWidth(columnWithCategory,
-                tableWithData.getWidth() - buttonXSize * 3 / 4));
+        tableWithData.widthProperty().addListener(e -> setStringColumnWidth(columnWithCategory,
+                tableWithData.getWidth() - buttonXSize * 5 / 4));
 
-        setUpPanelWithData(boxWithContent,dataPanel,boxForTable,boxForButtons,true);
+        setUpPanelWithData(boxWithContent,dataPanel,centralVBox,boxForButtons,true);
+    }
+
+    private void setOverAllBox(HBox overAllBox) {
+        VBox rangeBox = new VBox();
+        setBoxHeight(rangeBox, 2 * buttonBoxYSize);
+
+        HBox rangeLblBox = new HBox();
+        setBoxHeight(rangeLblBox, buttonBoxYSize);
+        rangeLblBox.setAlignment(Pos.CENTER);
+
+        HBox rangePickBox = new HBox();
+        setBoxHeight(rangePickBox, buttonBoxYSize);
+        rangePickBox.setAlignment(Pos.CENTER);
+
+        Label dateRange = new Label("Range: ");
+        dateRange.setStyle("-fx-font-size: 20px");
+
+        rangeLblBox.getChildren().add(dateRange);
+
+        ComboBox<String> month = new ComboBox<>();
+        ComboBox<Integer> year = new ComboBox<>();
+
+        usersControlStore.populateYearList();
+        year.setItems(usersControlStore.getYears());
+        year.getSelectionModel().selectFirst();
+
+        month.setItems(usersControlStore.getMonths());
+        LocalDateTime currentDate = LocalDateTime.now();
+        int currentMonth = currentDate.getMonth().getValue() - 1;
+        month.getSelectionModel().select(currentMonth);
+
+        rangePickBox.getChildren().add(month);
+        rangePickBox.getChildren().add(year);
+
+        rangeBox.getChildren().add(rangeLblBox);
+        rangeBox.getChildren().add(rangePickBox);
+
+        VBox gainsBox = new VBox();
+        gainsBox.setAlignment(Pos.CENTER);
+        Label gains = new Label();
+
+        gains.setStyle("-fx-font-size: 30px; -fx-text-fill: green");
+
+        gainsBox.getChildren().add(gains);
+
+        VBox lossesBox = new VBox();
+        lossesBox.setAlignment(Pos.CENTER);
+        Label lost = new Label();
+
+        lost.setStyle("-fx-font-size: 30px; -fx-text-fill: red");
+
+        lossesBox.getChildren().add(lost);
+
+        VBox summaryBox = new VBox();
+        summaryBox.setAlignment(Pos.CENTER);
+        Label summary = new Label();
+
+        summaryBox.getChildren().add(summary);
+
+        overAllBox.getChildren().add(rangeBox);
+        overAllBox.getChildren().add(gainsBox);
+        overAllBox.getChildren().add(lossesBox);
+        overAllBox.getChildren().add(summaryBox);
+
+        setOnRangePicked(gains,lost,summary,month,year);
+
+        month.setOnAction(e -> setOnRangePicked(gains,lost,summary,month,year));
+        year.setOnAction(e -> setOnRangePicked(gains,lost,summary,month,year));
+    }
+
+    private void setOnRangePicked(Label gains, Label losses, Label summary, ComboBox<String> month, ComboBox<Integer> year) {
+        int monthInt = month.getSelectionModel().getSelectedIndex() + 1;
+        int yearInt = year.getValue();
+        SummaryDTO summaryDTO =usersControlStore.getSummaryValues(RangeDTO.builder()
+                .userName(usersControlStore.getUsername()).month(monthInt).year(yearInt).build());
+        gains.setText(summaryDTO.getGainSummary().toString());
+        losses.setText(summaryDTO.getLossesSummary().toString());
+        if (summaryDTO.getOverAllSummary() > 0) {
+            summary.setText("+" + summaryDTO.getOverAllSummary());
+            summary.setStyle("-fx-font-size: 30px; -fx-text-fill: green");
+        } else {
+            summary.setText("-" + summaryDTO.getOverAllSummary());
+            summary.setStyle("-fx-font-size: 30px; -fx-text-fill: red");
+        }
     }
 
     private void setTableWithData() {
         columnWithCategory.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
+        columnWithDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         columnWithValue.setCellValueFactory(new  PropertyValueFactory<>("amount"));
 
         tableWithData.getColumns().add(columnWithCategory);
+        tableWithData.getColumns().add(columnWithDate);
         tableWithData.getColumns().add(columnWithValue);
 
         tableWithData.setItems(gainsAndLosses);
@@ -188,10 +291,10 @@ public class UsersControlController implements Initializable {
     }
 
     private void fillTableWithData() {
-        Optional<List<DataDTO>> optional = usersControlStore.getDataValues();
+        Optional<List<Data>> optional = usersControlStore.getDataValues();
         gainsAndLosses.clear();
         if (optional.isPresent()) {
-            List<DataDTO> dataDTOS = optional.get();
+            List<Data> dataDTOS = optional.get();
             gainsAndLosses.addAll(dataDTOS);
         }
     }
@@ -215,7 +318,7 @@ public class UsersControlController implements Initializable {
         setUpLabelAndControls(typeBox,typeLbl,type);
 
         HBox errorBox = new HBox();
-        setHBoxHeight(errorBox, buttonBoxYSize);
+        setBoxHeight(errorBox, buttonBoxYSize);
 
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction(e -> usersControlStore.saveNewCategory(createNewCategory(categoryTxtField,type)));
@@ -245,7 +348,7 @@ public class UsersControlController implements Initializable {
         setUpLabelAndControls(categoryBox,categoryLbl,categoryComboBox);
 
         HBox errorBox = new HBox();
-        setHBoxHeight(errorBox, buttonBoxYSize);
+        setBoxHeight(errorBox, buttonBoxYSize);
 
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction(e -> {
@@ -313,13 +416,13 @@ public class UsersControlController implements Initializable {
         vBox.setMaxHeight(height);
     }
 
-    private void setHBoxWidth(HBox hBox, Double width) {
+    private void setBoxWidth(Pane hBox, Double width) {
         hBox.setMinWidth(width);
         hBox.setPrefWidth(width);
         hBox.setMaxWidth(width);
     }
 
-    private void setHBoxHeight(HBox hBox, Double height) {
+    private void setBoxHeight(Pane hBox, Double height) {
         hBox.setMinHeight(height);
         hBox.setPrefHeight(height);
         hBox.setMaxHeight(height);
@@ -361,19 +464,25 @@ public class UsersControlController implements Initializable {
         emptyBoxForAliment.setPrefWidth((buttonBoxXSize - buttonXSize) / 2.0);
     }
 
-    private void setTableWidth(TableView<DataDTO> table, Double width) {
+    private void setTableWidth(TableView<Data> table, Double width) {
         table.setMinWidth(width);
         table.setMaxWidth(width);
         table.setPrefWidth(width);
     }
 
-    private void setStingColumnWidth(TableColumn<DataDTO, String> tableColumn, Double width) {
+    private void setStringColumnWidth(TableColumn<Data, String> tableColumn, Double width) {
         tableColumn.setMinWidth(width-2);
         tableColumn.setPrefWidth(width-2);
         tableColumn.setMaxWidth(width-2);
     }
 
-    private void setDoubleColumnWidth(TableColumn<DataDTO, Double> tableColumn, Double width) {
+    private void setDoubleColumnWidth(TableColumn<Data, Double> tableColumn, Double width) {
+        tableColumn.setMinWidth(width);
+        tableColumn.setPrefWidth(width);
+        tableColumn.setMaxWidth(width);
+    }
+
+    private void setDateColumnWidth(TableColumn<Data, LocalDateTime> tableColumn, Double width) {
         tableColumn.setMinWidth(width);
         tableColumn.setPrefWidth(width);
         tableColumn.setMaxWidth(width);
@@ -383,12 +492,12 @@ public class UsersControlController implements Initializable {
         HBox leftBox = new HBox();
         HBox rightBox = new HBox();
 
-        setHBoxWidth(leftBox,150.0);
-        setHBoxHeight(leftBox, buttonBoxYSize);
+        setBoxWidth(leftBox,150.0);
+        setBoxHeight(leftBox, buttonBoxYSize);
         leftBox.setAlignment(Pos.CENTER_RIGHT);
 
-        setHBoxWidth(rightBox,350.0);
-        setHBoxHeight(rightBox, buttonBoxYSize);
+        setBoxWidth(rightBox,350.0);
+        setBoxHeight(rightBox, buttonBoxYSize);
         rightBox.setAlignment(Pos.CENTER_LEFT);
 
         wholeLineBox.getChildren().add(leftBox);
@@ -409,7 +518,7 @@ public class UsersControlController implements Initializable {
         textField.setMinWidth(300);
     }
 
-    private void setUpPanelWithData(VBox boxWithContent, HBox dataPanel, HBox centralBox, VBox buttonsBox, boolean buttonsBoxPresent) {
+    private void setUpPanelWithData(VBox boxWithContent, HBox dataPanel, VBox centralBox, VBox buttonsBox, boolean buttonsBoxPresent) {
         HBox emptyLineUpTop = new HBox();
         setEmptyBoxSize(emptyLineUpTop);
 
@@ -419,10 +528,14 @@ public class UsersControlController implements Initializable {
         HBox emptyBoxForAliment = new HBox();
         setEmptyBoxForAlimentSize(emptyBoxForAliment);
 
-        setHBoxHeight(dataPanel,heightOfWindow - 2 * buttonYSize);
-        setHBoxWidth(dataPanel, widthOfWindow - buttonBoxXSize);
-        boxWithContent.heightProperty().addListener(e -> setHBoxHeight(dataPanel,boxWithContent.getHeight() - 2 * buttonYSize));
-        boxWithContent.widthProperty().addListener(e -> setHBoxWidth(dataPanel, boxWithContent.getWidth()));
+        setBoxHeight(dataPanel,heightOfWindow - 2 * buttonYSize);
+        setBoxWidth(dataPanel, widthOfWindow - buttonBoxXSize);
+        boxWithContent.heightProperty().addListener(e ->
+        {
+            setBoxHeight(dataPanel,boxWithContent.getHeight() - 2 * buttonYSize);
+            setBoxHeight(centralBox,boxWithContent.getHeight() - 2 * buttonYSize);
+        });
+        boxWithContent.widthProperty().addListener(e -> setBoxWidth(dataPanel, boxWithContent.getWidth()));
 
         List<? extends Pane> nodesThatSetUpDataPanel = new ArrayList<>(
                 Arrays.asList(emptyBoxForAliment,centralBox,buttonsBox)
@@ -439,11 +552,11 @@ public class UsersControlController implements Initializable {
         addListOfNodesToParentNode(boxWithContent, nodesThatSetStyleToBoxWithContent);
     }
 
-    private void setCentralBoxWidth (HBox dataPanel, HBox centralBox, Boolean buttonsBoxPresent) {
+    private void setCentralBoxWidth (HBox dataPanel, VBox centralBox, Boolean buttonsBoxPresent) {
         if (buttonsBoxPresent) {
-            setHBoxWidth(centralBox, dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
+            setBoxWidth(centralBox, dataPanel.getWidth() - buttonBoxXSize - (buttonBoxXSize - buttonXSize) / 2.0);
         } else {
-            setHBoxWidth(centralBox, dataPanel.getWidth() - (buttonBoxXSize - buttonXSize) / 2.0);
+            setBoxWidth(centralBox, dataPanel.getWidth() - (buttonBoxXSize - buttonXSize) / 2.0);
         }
     }
 
