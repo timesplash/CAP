@@ -12,6 +12,7 @@ import org.dev.api.CAP.model.SummaryDTO;
 import org.dev.frontend.CAP.model.Data;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,10 +82,11 @@ public class UsersControlStore {
     }
 
     public void populateYearList() {
-        years.clear();
         LocalDateTime currentDate = LocalDateTime.now();
         for (int year = currentDate.getYear(); year > 1950; year--) {
-            years.add(year);
+            if (!years.contains(year)) {
+                years.add(year);
+            }
         }
     }
 
@@ -100,7 +102,7 @@ public class UsersControlStore {
         return storeRestUtils.getSummary(rangeDTO);
     }
 
-    public Optional<List<Data>> getDataValues() {
-        return storeRestUtils.getData(storeRestUtils.getCurrentUser().getUserName());
+    public Optional<List<Data>> getDataValues(RangeDTO rangeDTO) {
+        return storeRestUtils.getData(rangeDTO);
     }
 }

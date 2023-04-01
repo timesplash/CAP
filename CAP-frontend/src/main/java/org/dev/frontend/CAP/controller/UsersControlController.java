@@ -53,6 +53,20 @@ public class UsersControlController implements Initializable {
     @FXML
     private VBox boxWithContent;
 
+    @FXML
+    Label gains = new Label();
+
+    @FXML
+    Label lost = new Label();
+
+    @FXML
+    Label summary = new Label();
+
+    @FXML
+    ComboBox<String> month = new ComboBox<>();
+
+    @FXML
+    ComboBox<Integer> year = new ComboBox<>();
     private final TableView<Data> tableWithData = new TableView<>();
 
     private final TableColumn<Data, String> columnWithCategory = new TableColumn<>("Category");
@@ -107,9 +121,10 @@ public class UsersControlController implements Initializable {
         setButtonSize(creditCalculatorBtn);
         setUpButtonBox(buttonBoxCreditCalculator,creditCalculatorBtn);
 
-        boxWithButtons.getChildren().add(emptyHBoxForStyleOfButtons);
-        boxWithButtons.getChildren().add(buttonBoxGainsAndLoses);
-        boxWithButtons.getChildren().add(buttonBoxCreditCalculator);
+        List<? extends Pane> buttonBoxes = new ArrayList<>(Arrays.asList(emptyHBoxForStyleOfButtons,
+                buttonBoxGainsAndLoses,buttonBoxCreditCalculator));
+
+        addListOfNodesToParentNode(boxWithButtons, buttonBoxes);
 
         widthOfWindow = 800.0;
         heightOfWindow = 600.0;
@@ -133,8 +148,6 @@ public class UsersControlController implements Initializable {
         boxWithContent.getChildren().clear();
 
         HBox dataPanel = new HBox();
-
-        setTableWithData();
 
         VBox boxForButtons = new VBox();
         setVboxWidth(boxForButtons,buttonBoxXSize);
@@ -167,7 +180,9 @@ public class UsersControlController implements Initializable {
         VBox centralVBox = new VBox();
 
         HBox boxWithOverAll = new HBox();
+        usersControlStore.populateYearList();
         setOverAllBox(boxWithOverAll);
+        setTableWithData();
 
         HBox boxForTable = new HBox();
         boxForTable.getChildren().add(tableWithData);
@@ -210,10 +225,6 @@ public class UsersControlController implements Initializable {
 
         rangeLblBox.getChildren().add(dateRange);
 
-        ComboBox<String> month = new ComboBox<>();
-        ComboBox<Integer> year = new ComboBox<>();
-
-        usersControlStore.populateYearList();
         year.setItems(usersControlStore.getYears());
         year.getSelectionModel().selectFirst();
 
@@ -229,43 +240,45 @@ public class UsersControlController implements Initializable {
         rangeBox.getChildren().add(rangePickBox);
 
         VBox gainsBox = new VBox();
-        gainsBox.setAlignment(Pos.CENTER);
-        Label gains = new Label();
+        gainsBox.setAlignment(Pos.CENTER_RIGHT);
+        setBoxWidth(gainsBox,buttonBoxXSize);
 
         gains.setStyle("-fx-font-size: 30px; -fx-text-fill: green");
 
         gainsBox.getChildren().add(gains);
 
         VBox lossesBox = new VBox();
-        lossesBox.setAlignment(Pos.CENTER);
-        Label lost = new Label();
+        lossesBox.setAlignment(Pos.CENTER_RIGHT);
+        setBoxWidth(lossesBox,buttonBoxXSize);
 
         lost.setStyle("-fx-font-size: 30px; -fx-text-fill: red");
 
         lossesBox.getChildren().add(lost);
 
         VBox summaryBox = new VBox();
-        summaryBox.setAlignment(Pos.CENTER);
-        Label summary = new Label();
+        summaryBox.setAlignment(Pos.CENTER_RIGHT);
+        setBoxWidth(summaryBox,buttonBoxXSize);
 
         summaryBox.getChildren().add(summary);
 
-        overAllBox.getChildren().add(rangeBox);
-        overAllBox.getChildren().add(gainsBox);
-        overAllBox.getChildren().add(lossesBox);
-        overAllBox.getChildren().add(summaryBox);
+        List<? extends Pane> boxesWithOveralls = new ArrayList<>(Arrays.asList(rangeBox,gainsBox,lossesBox,summaryBox));
 
-        setOnRangePicked(gains,lost,summary,month,year);
+        addListOfNodesToParentNode(overAllBox, boxesWithOveralls);
 
-        month.setOnAction(e -> setOnRangePicked(gains,lost,summary,month,year));
-        year.setOnAction(e -> setOnRangePicked(gains,lost,summary,month,year));
+        setOnRangePicked(gains,lost,summary);
+
+        month.setOnAction(e -> {
+            setOnRangePicked(gains,lost,summary);
+            setTableWithData();
+        });
+        year.setOnAction(e -> {
+            setOnRangePicked(gains,lost,summary);
+            setTableWithData();
+        });
     }
 
-    private void setOnRangePicked(Label gains, Label losses, Label summary, ComboBox<String> month, ComboBox<Integer> year) {
-        int monthInt = month.getSelectionModel().getSelectedIndex() + 1;
-        int yearInt = year.getValue();
-        SummaryDTO summaryDTO =usersControlStore.getSummaryValues(RangeDTO.builder()
-                .userName(usersControlStore.getUsername()).month(monthInt).year(yearInt).build());
+    private void setOnRangePicked(Label gains, Label losses, Label summary) {
+        SummaryDTO summaryDTO =usersControlStore.getSummaryValues(setRange());
         gains.setText(summaryDTO.getGainSummary().toString());
         losses.setText(summaryDTO.getLossesSummary().toString());
         if (summaryDTO.getOverAllSummary() > 0) {
@@ -280,8 +293,11 @@ public class UsersControlController implements Initializable {
     private void setTableWithData() {
         columnWithCategory.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
         columnWithDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        columnWithDate.setStyle("-fx-alignment: CENTER;");
         columnWithValue.setCellValueFactory(new  PropertyValueFactory<>("amount"));
+        columnWithValue.setStyle("-fx-alignment: CENTER;");
 
+        tableWithData.getColumns().clear();
         tableWithData.getColumns().add(columnWithCategory);
         tableWithData.getColumns().add(columnWithDate);
         tableWithData.getColumns().add(columnWithValue);
@@ -291,7 +307,7 @@ public class UsersControlController implements Initializable {
     }
 
     private void fillTableWithData() {
-        Optional<List<Data>> optional = usersControlStore.getDataValues();
+        Optional<List<Data>> optional = usersControlStore.getDataValues(setRange());
         gainsAndLosses.clear();
         if (optional.isPresent()) {
             List<Data> dataDTOS = optional.get();
@@ -354,6 +370,7 @@ public class UsersControlController implements Initializable {
         saveBtn.setOnAction(e -> {
             usersControlStore.saveNewGainsOrLoses(createNewData(categoryComboBox,amountTxt));
             fillTableWithData();
+            setOnRangePicked(gains,lost,summary);
         });
 
         List<? extends Pane> popUpNodes = new ArrayList<>(
@@ -488,6 +505,12 @@ public class UsersControlController implements Initializable {
         tableColumn.setMaxWidth(width);
     }
 
+    private RangeDTO setRange() {
+        int monthInt = month.getSelectionModel().getSelectedIndex() + 1;
+        int yearInt = year.getValue();
+        return RangeDTO.builder().userName(usersControlStore.getUsername()).month(monthInt).year(yearInt).build();
+    }
+
     private void setUpLabelAndControls(HBox wholeLineBox, Label label, Control controlNode){
         HBox leftBox = new HBox();
         HBox rightBox = new HBox();
@@ -560,10 +583,10 @@ public class UsersControlController implements Initializable {
         }
     }
 
-    private void setUpPopUpStage(Stage popUpStage, AnchorPane anchorPane, Double widthOfWindow, Double heightOfWindow){
+    private void setUpPopUpStage(Stage popUpStage, AnchorPane anchorPane, Double widthOfWindow, Double heightOfWindow) {
         popUpStage.setMinWidth(widthOfWindow);
         popUpStage.setMinHeight(heightOfWindow);
-        popUpStage.setScene(new Scene(anchorPane,widthOfWindow,heightOfWindow));
+        popUpStage.setScene(new Scene(anchorPane, widthOfWindow, heightOfWindow));
         popUpStage.show();
         popUpStage.setResizable(false);
         popUpStage.setOnCloseRequest(e -> fillTableWithData());

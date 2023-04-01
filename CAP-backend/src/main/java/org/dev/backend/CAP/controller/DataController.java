@@ -29,8 +29,8 @@ public class DataController {
     }
 
     @PostMapping
-    public ResponseEntity<List<DataDTO>> getData(@RequestBody String username) {
-        return new ResponseEntity<>(dataService.getData(username), HttpStatus.OK);
+    public ResponseEntity<List<DataDTO>> getData(@RequestBody RangeDTO rangeDTO) {
+        return new ResponseEntity<>(dataService.getData(rangeDTO), HttpStatus.OK);
     }
 
     @PostMapping("/summary")

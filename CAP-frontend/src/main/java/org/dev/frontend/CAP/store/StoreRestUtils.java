@@ -112,8 +112,8 @@ public class StoreRestUtils {
         restTemplate.put(DATA_URL, dataDTO);
     }
 
-    public Optional<List<Data>> getData(String username) {
-        Data[] dataDTOS = restTemplate.postForObject(DATA_URL, username, Data[].class);
+    public Optional<List<Data>> getData(RangeDTO rangeDTO) {
+        Data[] dataDTOS = restTemplate.postForObject(DATA_URL, rangeDTO, Data[].class);
         if (dataDTOS != null) {
             return Optional.of(Arrays.asList(dataDTOS));
         } else {

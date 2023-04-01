@@ -28,13 +28,13 @@ public class DataService {
         dataRepository.save(dataDTO);
     }
 
-    public List<DataDTO> getData(String username) {
-        log.info("Getting transfers for user: " + username);
-        return dataRepository.getData(username);
+    public List<DataDTO> getData(RangeDTO rangeDTO) {
+        log.info("Getting transfers for user: " + rangeDTO.getUserName());
+        return dataRepository.getData(rangeDTO);
     }
 
     public SummaryDTO getSummary(RangeDTO rangeDTO) {
-        List<DataDTO> dataDTOS = getData(rangeDTO.getUserName());
+        List<DataDTO> dataDTOS = getData(rangeDTO);
         double gains = 0.0;
         double losses = 0.0;
         double summary = 0.0;

@@ -2,6 +2,7 @@ package org.dev.backend.CAP.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.dev.api.CAP.model.DataDTO;
+import org.dev.api.CAP.model.RangeDTO;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,9 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -43,8 +47,19 @@ public class DataRepositoryImpl extends JdbcDaoSupport implements DataRepository
 
 
     @Override
-    public List<DataDTO> getData(String username) {
-        return getJdbcTemplate().query(FIND_FOR_USER_REQUEST, new DataRowMapper(),username);
+    public List<DataDTO> getData(RangeDTO rangeDTO) {
+        List<DataDTO> dataDTOList = getJdbcTemplate().query(FIND_FOR_USER_REQUEST,
+                new DataRowMapper(),rangeDTO.getUserName());
+        List<DataDTO> dataSorted = new ArrayList<>();
+        for (DataDTO dataDTO: dataDTOList) {
+            if (dataDTO.getDate().getYear() == rangeDTO.getYear()
+                    && dataDTO.getDate().getMonth().getValue() == rangeDTO.getMonth()) {
+                dataSorted.add(dataDTO);
+            }
+        }
+        LocalDateTimeComparator comparator = new LocalDateTimeComparator();
+        dataSorted.sort((o1, o2) -> comparator.compare(o1.getDate(),o2.getDate()));
+        return dataSorted;
     }
 
     @Override
@@ -63,5 +78,22 @@ public class DataRepositoryImpl extends JdbcDaoSupport implements DataRepository
                     .username(rs.getString(5))
                     .build();
         }
+    }
+
+    private static class LocalDateTimeComparator implements Comparator<LocalDateTime> {
+        @Override
+        public int compare(LocalDateTime o1, LocalDateTime o2) {
+            int result = o1.toLocalDate().compareTo(o2.toLocalDate());
+            result = (-1) * result;
+            if (0 == result) {
+                result = o1.toLocalTime().compareTo(o2.toLocalTime());
+                result = (-1) * result;
+            }
+
+            return result;
+
+        }
+
+
     }
 }
