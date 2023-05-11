@@ -1,6 +1,5 @@
 package org.dev.api.CAP.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.dev.api.CAP.enums.Role;
 
@@ -9,7 +8,6 @@ import org.dev.api.CAP.enums.Role;
 @Builder
 @Getter
 @Setter
-//@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO {
 
     private String userName;

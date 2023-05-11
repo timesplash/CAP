@@ -1,5 +1,6 @@
 package org.dev.frontend.CAP.controller;
 
+import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.dev.api.CAP.enums.Type;
 import org.dev.api.CAP.model.CategoriesDTO;
 import org.dev.api.CAP.model.DataDTO;
@@ -34,6 +36,8 @@ public class UsersControlController implements Initializable {
 
     private final Double buttonYSize = 25.0;
 
+    private final Double smallControls = 35.0;
+
     private final ObservableList<Data> gainsAndLosses = FXCollections.observableArrayList();
 
     private Double xSize;
@@ -54,19 +58,20 @@ public class UsersControlController implements Initializable {
     private VBox boxWithContent;
 
     @FXML
-    Label gains = new Label();
+    private final Label gains = new Label();
 
     @FXML
-    Label lost = new Label();
+    private final Label lost = new Label();
 
     @FXML
-    Label summary = new Label();
+    private final Label summary = new Label();
 
     @FXML
-    ComboBox<String> month = new ComboBox<>();
+    private final ComboBox<String> month = new ComboBox<>();
 
     @FXML
-    ComboBox<Integer> year = new ComboBox<>();
+    private final ComboBox<Integer> year = new ComboBox<>();
+
     private final TableView<Data> tableWithData = new TableView<>();
 
     private final TableColumn<Data, String> columnWithCategory = new TableColumn<>("Category");
@@ -79,18 +84,24 @@ public class UsersControlController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        parentHBox.getChildren().clear();
         usersControlStore.refreshStore();
 
         setVboxWidth(boxWithButtons,buttonBoxXSize);
+        boxWithButtons.setLayoutX(smallControls - buttonBoxXSize);
+        boxWithButtons.setOnMouseEntered(e -> {
+            setSmallControlsAnimation(boxWithButtons, 1.0, buttonBoxXSize-smallControls);
+        });
 
-        parentHBox.getChildren().add(boxWithButtons);
-        parentHBox.getChildren().add(boxWithContent);
+        boxWithButtons.setOnMouseExited(e -> {
+            setSmallControlsAnimation(boxWithButtons, buttonBoxXSize-smallControls, 1.0);
+        });
 
-        xSize = parentHBox.getWidth() - boxWithButtons.getWidth();
+        boxWithContent.setLayoutX(smallControls);
+
+        xSize = parentHBox.getWidth() - smallControls;
         setVboxWidth(boxWithContent,xSize);
         parentHBox.widthProperty().addListener(e -> {
-            xSize = parentHBox.getWidth() - boxWithButtons.getWidth();
+            xSize = parentHBox.getWidth() - smallControls;
             setVboxWidth(boxWithContent,xSize);
         });
 
@@ -128,10 +139,10 @@ public class UsersControlController implements Initializable {
 
         widthOfWindow = 800.0;
         heightOfWindow = 600.0;
-        setVboxWidth(boxWithContent,widthOfWindow - buttonBoxXSize);
+        setVboxWidth(boxWithContent,widthOfWindow - smallControls);
         parentHBox.widthProperty().addListener(e -> {
             widthOfWindow = parentHBox.getWidth();
-            setVboxWidth(boxWithContent,widthOfWindow - buttonBoxXSize);
+            setVboxWidth(boxWithContent,widthOfWindow - smallControls);
         });
 
         setVboxHeight(boxWithContent,heightOfWindow);
@@ -139,6 +150,16 @@ public class UsersControlController implements Initializable {
             heightOfWindow = parentHBox.getHeight();
             setVboxHeight(boxWithContent,heightOfWindow);
         });
+
+        openGainsAndLosesPanelBtnAcn(boxWithContent);
+    }
+
+    private void setSmallControlsAnimation(VBox boxWithButtons, Double start, Double finish) {
+        TranslateTransition st = new TranslateTransition(Duration.seconds(0.5), boxWithButtons);
+
+        st.setFromX(start);
+        st.setToX(finish);
+        st.play();
     }
 
     /**
@@ -189,6 +210,8 @@ public class UsersControlController implements Initializable {
         centralVBox.getChildren().add(boxWithOverAll);
         centralVBox.getChildren().add(boxForTable);
 
+        setUpPanelWithData(boxWithContent,dataPanel,centralVBox,boxForButtons,true);
+
         setBoxHeight(boxForTable, centralVBox.getHeight()-2*buttonBoxYSize);
         centralVBox.heightProperty().addListener(e -> setBoxHeight(boxForTable, centralVBox.getHeight()-2*buttonBoxYSize));
 
@@ -205,7 +228,7 @@ public class UsersControlController implements Initializable {
         tableWithData.widthProperty().addListener(e -> setStringColumnWidth(columnWithCategory,
                 tableWithData.getWidth() - buttonXSize * 5 / 4));
 
-        setUpPanelWithData(boxWithContent,dataPanel,centralVBox,boxForButtons,true);
+        //setUpPanelWithData(boxWithContent,dataPanel,centralVBox,boxForButtons,true);
     }
 
     private void setOverAllBox(HBox overAllBox) {
@@ -225,13 +248,7 @@ public class UsersControlController implements Initializable {
 
         rangeLblBox.getChildren().add(dateRange);
 
-        year.setItems(usersControlStore.getYears());
-        year.getSelectionModel().selectFirst();
-
-        month.setItems(usersControlStore.getMonths());
-        LocalDateTime currentDate = LocalDateTime.now();
-        int currentMonth = currentDate.getMonth().getValue() - 1;
-        month.getSelectionModel().select(currentMonth);
+        setDateComboBoxItems();
 
         rangePickBox.getChildren().add(month);
         rangePickBox.getChildren().add(year);
@@ -275,6 +292,16 @@ public class UsersControlController implements Initializable {
             setOnRangePicked(gains,lost,summary);
             setTableWithData();
         });
+    }
+
+    private void setDateComboBoxItems() {
+        year.setItems(usersControlStore.getYears());
+        year.getSelectionModel().selectFirst();
+
+        month.setItems(usersControlStore.getMonths());
+        LocalDateTime currentDate = LocalDateTime.now();
+        int currentMonth = currentDate.getMonth().getValue() - 1;
+        month.getSelectionModel().select(currentMonth);
     }
 
     private void setOnRangePicked(Label gains, Label losses, Label summary) {
@@ -552,7 +579,7 @@ public class UsersControlController implements Initializable {
         setEmptyBoxForAlimentSize(emptyBoxForAliment);
 
         setBoxHeight(dataPanel,heightOfWindow - 2 * buttonYSize);
-        setBoxWidth(dataPanel, widthOfWindow - buttonBoxXSize);
+        setBoxWidth(dataPanel, boxWithContent.getWidth());
         boxWithContent.heightProperty().addListener(e ->
         {
             setBoxHeight(dataPanel,boxWithContent.getHeight() - 2 * buttonYSize);
