@@ -12,7 +12,6 @@ import org.dev.api.CAP.model.SummaryDTO;
 import org.dev.frontend.CAP.model.Data;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,9 +75,8 @@ public class UsersControlStore {
         }
     }
 
-    public String saveNewCategory(CategoriesDTO categoriesDTO) {
+    public void saveNewCategory(CategoriesDTO categoriesDTO) {
         storeRestUtils.saveCategory(categoriesDTO);
-        return "";
     }
 
     public void populateYearList() {
@@ -90,12 +88,11 @@ public class UsersControlStore {
         }
     }
 
-    public String saveNewGainsOrLoses(DataDTO dataDTO) {
+    public void saveNewGainsOrLoses(DataDTO dataDTO) {
         LocalDateTime localDateTime = LocalDateTime.now();
         dataDTO.setDate(localDateTime);
         dataDTO.setUsername(storeRestUtils.getCurrentUser().getUserName());
         storeRestUtils.saveData(dataDTO);
-        return "";
     }
 
     public SummaryDTO getSummaryValues(RangeDTO rangeDTO) {

@@ -127,17 +127,16 @@ table-view .filler {
     -fx-text-fill: #b5b5b5
 }
 
-.combo-box .list-cell
+.combo-box-base .cell
 {
-    -fx-background-color: #797979, #393939;
-    -fx-text-fill: #b5b5b5;
-
+    -fx-background-color: transparent;
+    -fx-text-fill: #b5b5b5
 }
 
 .combo-box-popup .list-view
 {
     -fx-background-color: #717171, #393939;
-
+    -fx-background-radius: 6;
 }
 
 .combo-box-popup .list-view .list-cell

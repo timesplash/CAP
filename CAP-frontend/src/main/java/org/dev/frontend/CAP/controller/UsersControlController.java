@@ -155,7 +155,7 @@ public class UsersControlController implements Initializable {
     }
 
     private void setSmallControlsAnimation(VBox boxWithButtons, Double start, Double finish) {
-        TranslateTransition st = new TranslateTransition(Duration.seconds(0.5), boxWithButtons);
+        TranslateTransition st = new TranslateTransition(Duration.seconds(0.3), boxWithButtons);
 
         st.setFromX(start);
         st.setToX(finish);
@@ -312,7 +312,7 @@ public class UsersControlController implements Initializable {
             summary.setText("+" + summaryDTO.getOverAllSummary());
             summary.setStyle("-fx-font-size: 30px; -fx-text-fill: green");
         } else {
-            summary.setText("-" + summaryDTO.getOverAllSummary());
+            summary.setText(summaryDTO.getOverAllSummary().toString());
             summary.setStyle("-fx-font-size: 30px; -fx-text-fill: red");
         }
     }
