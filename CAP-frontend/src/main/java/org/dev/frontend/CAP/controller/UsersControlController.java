@@ -88,13 +88,9 @@ public class UsersControlController implements Initializable {
 
         setVboxWidth(boxWithButtons,buttonBoxXSize);
         boxWithButtons.setLayoutX(smallControls - buttonBoxXSize);
-        boxWithButtons.setOnMouseEntered(e -> {
-            setSmallControlsAnimation(boxWithButtons, 1.0, buttonBoxXSize-smallControls);
-        });
+        boxWithButtons.setOnMouseEntered(e -> setSmallControlsAnimation(boxWithButtons, 1.0, buttonBoxXSize-smallControls));
 
-        boxWithButtons.setOnMouseExited(e -> {
-            setSmallControlsAnimation(boxWithButtons, buttonBoxXSize-smallControls, 1.0);
-        });
+        boxWithButtons.setOnMouseExited(e -> setSmallControlsAnimation(boxWithButtons, buttonBoxXSize-smallControls, 1.0));
 
         boxWithContent.setLayoutX(smallControls);
 
@@ -227,8 +223,6 @@ public class UsersControlController implements Initializable {
 
         tableWithData.widthProperty().addListener(e -> setStringColumnWidth(columnWithCategory,
                 tableWithData.getWidth() - buttonXSize * 5 / 4));
-
-        //setUpPanelWithData(boxWithContent,dataPanel,centralVBox,boxForButtons,true);
     }
 
     private void setOverAllBox(HBox overAllBox) {
