@@ -21,7 +21,7 @@ public class CategoriesController {
     }
 
     @PutMapping
-    void save(@RequestBody CategoriesDTO categoriesDTO){
+    void save(@RequestBody CategoriesDTO categoriesDTO) {
         categoriesService.save(categoriesDTO);
     }
 

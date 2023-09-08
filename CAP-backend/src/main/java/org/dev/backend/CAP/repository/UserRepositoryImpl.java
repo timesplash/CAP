@@ -37,9 +37,10 @@ public class UserRepositoryImpl extends JdbcDaoSupport implements UserRepository
 
     private final DataRepository dataRepository;
 
-    public UserRepositoryImpl(DataSource dataSource, DataRepository dataRepository){
+    public UserRepositoryImpl(DataSource dataSource, DataRepository dataRepository) {
         this.dataRepository = dataRepository;
-        setDataSource(dataSource);}
+        setDataSource(dataSource);
+    }
 
     @Override
     public void save(User user) {
